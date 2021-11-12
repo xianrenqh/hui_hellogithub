@@ -1,0 +1,54 @@
+{
+  "name": "xianrenqh/huicmf_tp6",
+  "description": "HuiCMF6.0 By ThinkPHP6.0",
+  "type": "project",
+  "keywords": [
+    "huicmf",
+    "thinkphp",
+    "cmf",
+    "phpcmf"
+  ],
+  "homepage": "https://xiaohuihui.net.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "xiaohuihui",
+      "email": "762229008@qq.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.1.0",
+    "topthink/framework": "^6.0.0",
+    "topthink/think-orm": "^2.0",
+    "topthink/think-multi-app": "^1.0",
+    "topthink/think-view": "^1.0.14",
+    "topthink/think-captcha": "^3.0",
+    "doctrine/annotations": "1.*",
+    "topthink/think-image": "^1.0",
+    "xiaodi/think-whoops": "^1.1",
+    "zzstudio/think-addons": "^2.0"
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^4.2",
+    "topthink/think-trace": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "app\\": "app",
+      "plugins\\": "public/plugins",
+      "themes\\": "public/plugins"
+    },
+    "psr-0": {
+      "": "extend/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "@php think service:discover",
+      "@php think vendor:publish"
+    ]
+  }
+}

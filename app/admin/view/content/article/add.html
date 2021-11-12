@@ -1,0 +1,381 @@
+{include file='header'/}
+<title>添加内容</title>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <form class="layui-form layuimini-form" action="javascript:" onsubmit="return dosub(this)" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label required">所属栏目</label>
+                <div class="layui-input-block">
+                    <label>
+                        <select name="type_id" lay-verify="required" lay-reqtext="请先选择栏目">
+                            <option value="">请选择栏目</option>
+                            {foreach $pidMenuList as $vo}
+                            <option value="{$vo.id}">{$vo.cate_name|raw}</option>
+                            {/foreach}
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">标题</label>
+                <div class="layui-input-block">
+                    <label for="title">
+                        <input type="text" id="title" name="title" value="" lay-verify="required" autocomplete="off"
+                               class="layui-input" lay-reqtext="标题不能为空">
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">属性</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="flag[]" value="1" title="置顶[1]">
+                    <input type="checkbox" name="flag[]" value="2" title="头条[2]">
+                    <input type="checkbox" name="flag[]" value="3" title="特荐[3]">
+                    <input type="checkbox" name="flag[]" value="4" title="推荐[4]">
+                    <input type="checkbox" name="flag[]" value="5" title="热点[5]">
+                    <input type="checkbox" name="flag[]" value="6" title="幻灯[6]">
+                    <input type="checkbox" name="flag[]" value="7" title="跳转[7]" lay-filter="flag">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-hide" id="jumpUrl">
+                <label class="layui-form-label required">跳转url</label>
+                <div class="layui-input-block">
+                    <label for="jump_url">
+                        <input type="text" id="jump_url" name="jump_url" value="" autocomplete="off" class="layui-input"
+                               data-s='0'>
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">缩略图</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-inline" style="width: 50%">
+                        <label for="image">
+                            <input type="text" name="image" value="" onmouseover="hui_img_preview('image',this.value)"
+                                   onmouseout="layer.closeAll();" id="image" autocomplete="off" class="layui-input">
+                        </label>
+                    </div>
+                    <div class="layui-input-inline" style="width: 120px">
+                        <button type="button" class="layui-btn" id="test1"><i class="layui-icon">&#xe67c;</i>上传图片
+                        </button>
+                    </div>
+                    <div class="layui-input-inline" style="width: 120px">
+                        <button type="button" class="layui-btn layui-btn-fense" id="pic_cropper"
+                                onclick="hui_img_cropper('image','{:__url(\'upload/img_cropper\')}')"><i
+                                class="layui-icon layui-icon-picture"></i>裁剪图片
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" id="imgItem">
+                <label class="layui-form-label">上传多图：</label>
+                <button type="button" id="importModel" class="layui-hide">图片导入</button>
+                <div class="layui-input-inlines-self" id="imgItemInfo">
+                    <div class="layui-upload-drag-self" id="importImg0">
+                        <div id="imgDivs0">
+                            <i class="layui-icon" id="uploadIcon0"> &#xe624; </i>
+                        </div>
+                        <div class="img layui-hide" id="uploadDemoView0">
+                            <img class="layui-upload-img" id="imgs0" src="" alt="">
+                            <div class="handle layui-hide" id="handle0">
+                                <i class="layui-icon layui-icon-picture-fine" id="preImg0" style="color:#fff"></i>
+                                <i class="layui-icon layui-icon-delete" id="delImg0" style="color:#fff"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-hide">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <label for="thumbs">
+                        <input class="layui-input" type="text" id="thumbs" name="thumbs">
+                    </label>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">点击量</label>
+                    <div class="layui-input-inline">
+                        <label for="click">
+                            <input type="number" id="click" name="click" value="{$click}" autocomplete="off"
+                                   class="layui-input">
+                        </label>
+                        <tip>默认随机100以内</tip>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">权重</label>
+                    <div class="layui-input-inline">
+                        <label for="weight">
+                            <input type="number" id="weight" name="weight" value="0" autocomplete="off"
+                                   class="layui-input">
+                        </label>
+                        <tip>越大排序越靠前</tip>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">编辑昵称</label>
+                    <div class="layui-input-inline">
+                        <label for="nickname">
+                            <input type="text" id="nickname" name="nickname"
+                                   value="{php}echo session('admin.nickname')?session('admin.nickname'):'管理员'{/php}"
+                                   autocomplete="off" class="layui-input">
+                        </label>
+
+                        <tip>默认管理员昵称</tip>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label required">项目地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="git_url" name="git_url" value="" lay-verify="required"
+                           autocomplete="off"
+                           class="layui-input" lay-reqtext="项目地址不能为空">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">TAG：</label>
+                <div class="layui-input-inline block" style="width: 50%;">
+                    <div id="Huitags-demo1"></div>
+                </div>
+                <a class="layui-btn layui-btn-normal {if !check_auth('content.tag/select')}layui-hide{/if}"
+                   data-open="{:__url('content.tag/select')}"
+                   data-title="TAG标签选择" data-reload="0">选择</a>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">关键词</label>
+                <div class="layui-input-block">
+                    <label for="keywords">
+                        <input type="text" id="keywords" name="keywords" value="" autocomplete="off" class="layui-input"
+                               placeholder="每个关键字之间用“,”分割">
+                    </label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容摘要</label>
+                <div class="layui-input-block">
+                    <label>
+                        <textarea name="description" class="layui-textarea" placeholder="如不填写，则自动提取文章前200字符"
+                                  datatype="*10-300" dragonfly="true" nullmsg="文章摘要不能为空！"
+                                  onKeyUp="textarealength(this,300)"></textarea>
+                        <span class="textarea-numberbar"><em class="textarea-length">0</em>/300</span>
+                    </label>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">内容</label>
+                {if($editor eq 1)}
+                <div class="layui-input-block" id="contentEditorHtml" style="z-index: 0">
+                    {php}echo lib\Form::editor('content',$val='', 'width:100%;height:400px');{/php}
+                </div>
+                {else}
+                <div class="layui-input-block" id="contentEditorMD">
+                    {php}echo lib\Form::editorMd('content',$val='');{/php}
+                </div>
+                {/if}
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="auto_image" value="1" title="提取内容第一张图片为缩略图" lay-skin="primary">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-hide">
+                <label class="layui-form-label required">状态</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="editor" value="{$editor}">
+                    <input type="hidden" name="status" value="1">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-sm" onclick="set_status(1)">立即提交
+                    </button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="set_status(0)"> 保存草稿
+                    </button>
+                    <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{include file='footer'/}
+<script>
+  layui.use(['form', 'jquery', 'upload', 'miniHuitags'], function () {
+    let form = layui.form, $ = layui.jquery, upload = layui.upload;
+    form.render();
+    $("#Huitags-demo1").Huitags(
+      {
+        maxlength: 20,
+        number: 10,
+      }
+    );
+
+    //普通图片上传
+    upload.render({
+      elem: '#test1'
+      , url: "{:__url('upload/index',['save_path'=>'images'])}"
+      , done: function (res) {
+        console.log(res.src)
+        if (res.status === 1) {
+          $("#demo1").val(res.src);
+        }
+      }
+    })
+
+    $(document).on('click', '[id^=delImg]', function () {
+      let importImgF = $('#imgItemInfo').find('div:first');//importImg0、importImg1、importImg2
+      let empt = $(this).parent().parent().parent();//importImg0、importImg1、importImg2
+      let nextImgSrc = $(this).parent().parent().parent().next().find('img').attr('src');//src
+      //判断当前DIV后面的div的url是否为空
+      if (!nextImgSrc) {
+        //判断是否为第一个
+        if (importImgF.attr('id') === empt.attr('id')) {
+          //-是 ，清空第一个 最后面的删除
+          //图片url清空
+          empt.find('img').attr('src', '');
+          $(this).parent().parent().addClass('layui-hide');
+          importImgF.find('i:first').removeClass('layui-hide');
+          count--;
+          $('#' + 'importImg' + count).remove();
+        } else {
+          // -否，删除当前
+          empt.remove();
+        }
+      } else {
+        //如果有值删除当前div
+        empt.remove();
+      }
+      return false;
+    });
+    form.on('checkbox(flag)', function (obj) {
+      let check = obj.elem.checked;
+      if (check) {
+        $('#jumpUrl').removeClass('layui-hide');
+        $("#jumpUrl>div>input").attr('data-s', '1');
+      } else {
+        $('#jumpUrl').addClass('layui-hide');
+        $("#jumpUrl>div>input").attr('data-s', '0');
+      }
+    });
+
+    //图片预览
+    $(document).on('click', '[id^=preImg]', function () {
+      let iHtml = "<img src='" + $(this).parent().parent().find('img:first').attr('src') + "' style='width: 100%; height: 100%;' alt=''/>";
+      layer.open({
+        type: 1,
+        shade: false,
+        title: false, //不显示标题
+        area: ['50%', '50%'],
+        content: iHtml //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+      });
+      return false;
+    });
+
+    //图片绑定鼠标悬浮
+    $(document).on("mouseenter", ".img", function () {
+      //鼠标悬浮
+      $(this).find('div:first').removeClass('layui-hide');
+    }).on("mouseleave", ".img", function () {
+      //鼠标离开
+      $(this).find('div:first').addClass('layui-hide');
+    });
+
+    let imgsId,
+      uploadDemoViewId,
+      uploadIconId;
+    let count = 1;
+
+    $(document).on('click', '[id^=imgDivs]', function () {
+      if (count > 5) {
+        layer.msg('最多上传5张', {icon: 2});
+        return false;
+      }
+      //给id赋值
+      uploadIconId = $(this).find('i').attr('id');
+      uploadDemoViewId = $(this).next().attr('id');
+      imgsId = $(this).next().find('img').attr('id');
+      $('#importModel').click();
+    });
+
+    upload.render({
+      elem: '#importModel'
+      , multiple: true
+      , url: "{:__url('upload/index',['save_path'=>'images'])}"
+      , before: function (obj) {
+        obj.preview(function (index, file, result) {
+
+        });
+      }
+      , done: function (res) {
+        if (res.code !== 1) {
+          return layer.msg(res.msg, {icon: 2})
+        }
+        $('#' + imgsId).attr('src', res.url);
+        $('#' + uploadDemoViewId).removeClass('layui-hide');
+        $('#' + uploadIconId).addClass('layui-hide');
+        $('#imgItemInfo').append(
+          '<div class="layui-upload-drag-self" id="importImg' + count + '">' +
+          '<div id="imgDivs' + count + '">' +
+          '<i class="layui-icon" id="uploadIcon' + count + '"> &#xe624; </i>' +
+          '</div>' +
+          '<div class="img layui-hide" id="uploadDemoView' + count + '">' +
+          '<img class="layui-upload-img" id="imgs' + count + '" src="" alt="">' +
+          '<div class="handle layui-hide" id="handle' + count + '">' +
+          '<i class="layui-icon layui-icon-picture-fine" id="preImg' + count + '" style="color:#fff"></i>' +
+          '<i class="layui-icon layui-icon-delete" id="delImg' + count + '" style="color:#fff"></i>' +
+          '</div>' + '</div>' + '</div>'
+        );
+        count++;
+      }
+    });
+    window.set_status = function (s) {
+      $("input[name='status']").val(s);
+    }
+
+    window.dosub = function (obj) {
+      let jump_url = $('#jump_url').val();
+      let jumpCheck = $("#jumpUrl>div>input").attr('data-s');
+
+      if (jumpCheck === 1 && jump_url === '') {
+        layer.msg('跳转url地址不能为空', {icon: 2});
+        return false;
+      }
+      if (jump_url !== '') {
+        let strReg = "^((https|http|ftp|rtsp|mms)?://)";
+        let re = new RegExp(strReg);
+        if (!re.test(jump_url)) {
+          layer.msg('不是有效的url地址', {icon: 2});
+          return false;
+        }
+      }
+      let imgs = $('[id^=imgs]');
+      let imgArray = '';
+      imgs.each(function () {
+        let url = $(this).attr('src');
+        if (url) {
+          imgArray += url + ',';
+        }
+      });
+      $('#thumbs').val(imgArray);
+      HuiDoSub($(obj).serialize(), "{:__url('content.Article/add')}");
+    }
+  })
+  ;
+</script>
+
+</body>
+</html>

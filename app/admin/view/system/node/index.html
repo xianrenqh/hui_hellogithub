@@ -1,0 +1,53 @@
+{include file='header'/}
+<title>节点列表</title>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-btn-group">
+            <button class="layui-btn layui-btn-sm layuimini-btn-primary"><i class="fa fa-refresh"></i></button>
+            <button class="layui-btn layui-btn-success layui-btn-sm {if !check_auth('system.node/refreshNode')}layui-hide{/if}" data-confirm="{:__url('system.node/refreshNode')}"
+                    data-title="确定要更新节点？" data-reload="1"><i class="fa fa-hourglass"></i> 更新节点
+            </button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('system.node/refreshNode')}layui-hide{/if}"
+                    data-confirm="{:__url('system.node/refreshNode',['force'=>1])}" data-title="确定要强制更新节点？"
+                    data-reload="1"><i class="fa fa-hourglass"></i> 强制更新节点
+            </button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger {if !check_auth('system.node/clearNode')}layui-hide{/if}" data-confirm="{:__url('system.node/clearNode')}"
+                    data-title="确定清除失效节点？"
+                    data-reload="1"><i class="fa fa-trash-o"></i> 清除失效节点
+            </button>
+        </div>
+        <table class="layui-table">
+            <thead>
+            <tr>
+                <th>系统节点</th>
+                <th>节点名称</th>
+                <th>更新时间</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{include file='footer'/}
+</body>
+</html>
+<script>
+  layui.use(['form', 'jquery'], function () {
+    var form = layui.form, $ = layui.jquery, layer = layui.layer;
+    $.get("{:__url('system.node/index')}", function (res) {
+      let str = '';
+      $.each(res.data, function (index, obj) {
+        str += '<tr>';
+        str += '<td>' + obj.node + '</td>';
+        str += '<td>' + obj.title + '</td>';
+        str += '<td>' + obj.update_time + '</td>';
+        str += '</tr>';
+      });
+      $('#tbody').html(str);
+    })
+  })
+</script>
