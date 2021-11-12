@@ -1,4 +1,8 @@
-HuiCMF v6.0
+
+hui_hellogithub
+
+把自己在浏览 GitHub 过程中，发现的有意思、高质量、容易上手的项目收集起来，这样便于以后查找和学习。并把这些有意思、有价值的开源项目分享给大家。最后就写了这个网站，便于查看和分享。
+
 ===============
 **【基于ThinkPHP6.0和layui的快速开发的后台管理系统。】**
 
@@ -10,15 +14,6 @@ HuiCMF v6.0
 > 编辑器使用了 editor.md | UEeditor | icEditor
 >
 by:xiaohuihui
-
-## 安装
-
-- 首先：git clone 获取数据
-- 然后：composer update 更新数据
-- 接着访问： http://你的域名/install
-- 执行安装程序
-- 最后访问后台：http://你的域名/admin.php
-- 默认后台账号密码： admin admin888
 
 ## 使用说明
 
