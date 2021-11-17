@@ -25,6 +25,10 @@ require __DIR__.'/../vendor/autoload.php';
 
 // 定义目录分隔符
 define('DS', DIRECTORY_SEPARATOR);
+//定义项目根目录
+define('ROOT_PATH', __DIR__.DS.'..'.DS);
+//模板目录
+define('TEMPLATE_PATH', ROOT_PATH.'view'.DS.'index'.DS);
 
 // 执行HTTP应用并响应
 $http = (new App())->http;

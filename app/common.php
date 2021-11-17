@@ -4,8 +4,6 @@ use think\facade\Db;
 use app\common\service\AuthService;
 use app\admin\library\LibAuthService;
 
-//模板目录
-define('TEMPLATE_PATH', ROOT_PATH.'view'.DS.'index'.DS);
 /**
  * 返回带协议的域名
  */
