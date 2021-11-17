@@ -1,5 +1,4 @@
 {include file='header'/}
-<title>标签列表</title>
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
@@ -9,8 +8,20 @@
                 <form class="layui-form layui-col-md12" action="javascript:;" id="form_admin_search">
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <input type="text" name="tag_name" id="tag_name" placeholder="请输入tag" autocomplete="off"
+                            <input type="text" name="name" id="name" placeholder="请输入链接名称" autocomplete="off"
                                    class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" name="url" id="url" placeholder="请输入链接地址" autocomplete="off"
+                                   class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <select name="status" id="search_status">
+                                <option value="0">==可见性==</option>
+                                <option value="1">正常</option>
+                                <option value="10">待审核</option>
+                                <option value="2">未通过</option>
+                            </select>
                         </div>
                         <div class="layui-inline">
                             <button class="layui-btn layui-btn-sm" data-type="reload" lay-submit="" lay-filter="search">
@@ -28,18 +39,28 @@
 
         <div class="layui-btn-group">
             <button class="layui-btn layui-btn-sm layuimini-btn-primary btn-refresh"><i class="fa fa-refresh"></i></button>
-            <a class="layui-btn layui-btn-normal layui-btn-sm {if !check_auth('content.tag/add')}layui-hide{/if}" data-open="{:__url('content.tag/add')}"
-               data-title="添加标签">
-                <i class="fa fa-plus"></i> 添加标签</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm {if !check_auth('module.link/add')}layui-hide{/if}" data-open="{:__url('module.link/add')}"
+               data-title="添加友情链接">
+                <i class="fa fa-plus"></i> 添加链接</a>
         </div>
 
         <table id="tag_table" lay-filter="tag_table"></table>
-        
+
         <script type="text/html" id="barDemo">
-            <a class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('content.tag/edit')}layui-hide{/if}" data-open="{:__url('content.tag/edit')}?id={{d.id}}"
-               data-title="编辑标签" data-reload="2">编辑</a>
-            <a class="layui-btn layui-btn-danger layui-btn-sm {if !check_auth('content.tag/delete')}layui-hide{/if}" data-delete="{:__url('content.tag/delete')}?id={{d.id}}"
-               data-title="删除标签" data-reload="2">删除</a>
+            <a class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('module.link/edit')}layui-hide{/if}" data-open="{:__url('module.link/edit')}?id={{d.id}}"
+               data-title="编辑链接" data-reload="2">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-sm {if !check_auth('module.link/delete')}layui-hide{/if}" data-delete="{:__url('module.link/delete')}?id={{d.id}}"
+               data-title="删除链接" data-reload="2">删除</a>
+        </script>
+
+        <script type="text/html" id="status">
+            {{#  if(d.status == 0 ){ }}
+            <span class="layui-badge layui-bg-blue"> 待审核 </span>
+            {{# } else if(d.status== 1) { }}
+            <span class="layui-badge layui-bg-green"> 正常 </span>
+            {{#  } else { }}
+            <span class="layui-badge layui-bg-danger"> 未通过 </span>
+            {{#  } }}
         </script>
 
     </div>
@@ -60,9 +81,11 @@
       , cols: [[
         {type: 'numbers'}
         , {field: 'id', title: 'ID', width: 60, align: 'center', sort: true}
-        , {field: 'tag', title: '标签名称'}
-        , {field: 'total', title: '文章总数'}
-        , {field: 'create_time', title: '添加时间'}
+        , {field: 'name', title: '链接名称'}
+        , {field: 'url', title: 'url'}
+        , {field: 'listorder', title: '排序',width:100, align: 'center'}
+        , {field: 'update_time', title: '最后修改时间'}
+        , {field: 'status', title: '可见性',templet: '#status',width:120,align: 'center'}
         , {fixed: 'right', title: '操作', toolbar: '#barDemo', align: 'center'}
       ]]
       , id: 'testReload'
@@ -76,7 +99,9 @@
           page: {curr: 1},
           where: {
             key: {
-              tag_name: $('#tag_name').val()
+              name: $('#name').val(),
+              url: $('#url').val(),
+              status: $('#search_status').val()
             }
           }
         });

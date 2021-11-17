@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: 投实科技
+ * User: 小灰灰
  * Date: 2021-11-01
  * Time: 下午6:05:34
  * Info:
@@ -24,6 +24,16 @@ use think\App;
 class CategoryController extends AdminController
 {
 
+    private $themePath;
+
+    private $categoryTemplate;
+
+    private $listTemplate;
+
+    private $showTemplate;
+
+    private $pageTemplate;
+
     protected $sort = [
         'sort_order' => 'asc',
         'id'         => 'asc',
@@ -33,6 +43,13 @@ class CategoryController extends AdminController
     {
         parent::__construct($app);
         $this->model = new Category();
+        //取得当前内容模型模板存放目录
+        $this->themePath = TEMPLATE_PATH.(empty(get_config('site_theme')) ? "default" : get_config('site_theme'));
+        //取得栏目频道模板列表
+        $this->categoryTemplate = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'category*'));
+        $this->listTemplate     = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'list*'));
+        $this->showTemplate     = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'show*'));
+        $this->pageTemplate     = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'page*'));
     }
 
     /**
@@ -41,8 +58,8 @@ class CategoryController extends AdminController
     public function index()
     {
         if ($this->request->isAjax()) {
-            $list  = $this->model::order($this->sort)->select()->toArray();
             $count = $this->model::count();
+            $list  = $this->model::order($this->sort)->select()->toArray();
             $data  = [
                 'code'  => 0,
                 'msg'   => '',
@@ -73,6 +90,8 @@ class CategoryController extends AdminController
             if ( ! empty($row)) {
                 $this->error('栏目名称en已经存在啦，请重新输入');
             }
+            $param['setting'] = serialize($param['setting']);
+
             $save = $this->model->save($param);
             if ($save) {
                 $this->success('保存成功');
@@ -80,12 +99,21 @@ class CategoryController extends AdminController
                 $this->error('保存失败');
             }
         }
+        $type        = $this->request->param('type');
         $id          = $this->request->param('id');
         $pidMenuList = $this->model->getPidMenuList();
         $this->assign('id', $id);
         $this->assign('pidMenuList', $pidMenuList);
+        $this->assign('tp_category', $this->categoryTemplate);
+        $this->assign('tp_list', $this->listTemplate);
+        $this->assign('tp_show', $this->showTemplate);
+        $this->assign('tp_page', $this->pageTemplate);
 
-        return $this->fetch();
+        if ( ! empty($type) && $type == 1) {
+            return $this->fetch('add');
+        } else {
+            return $this->fetch('add_page');
+        }
     }
 
     /**
@@ -101,9 +129,11 @@ class CategoryController extends AdminController
             ];
             $this->validate($param, $rule);
             $row = $this->model->where('cate_en', $param['cate_en'])->find();
-            if ( ! empty($row)) {
+            if ( ! empty($row) && $row['id'] != $param['id']) {
                 $this->error('栏目名称en已经存在啦，请重新输入');
             }
+            $param['setting'] = serialize($param['setting']);
+
             $save = $this->model->update($param, ['id' => $param['id']]);
             if ($save) {
                 $this->success('保存成功');
@@ -111,17 +141,27 @@ class CategoryController extends AdminController
                 $this->error('保存失败');
             }
         }
+        $type = $this->request->param('type');
         $id   = $this->request->param('id');
         $data = $this->model->findOrEmpty($id);
         if ($data->isEmpty()) {
             $this->error('获取数据失败');
         }
-        $pidMenuList = $this->model->getPidMenuList();
+        $data['setting'] = unserialize($data['setting']);
+        $pidMenuList     = $this->model->getPidMenuList();
         $this->assign('id', $id);
         $this->assign('data', $data);
         $this->assign('pidMenuList', $pidMenuList);
+        $this->assign('tp_category', $this->categoryTemplate);
+        $this->assign('tp_list', $this->listTemplate);
+        $this->assign('tp_show', $this->showTemplate);
+        $this->assign('tp_page', $this->pageTemplate);
 
-        return $this->fetch();
+        if ( ! empty($type) && $type == 1) {
+            return $this->fetch('edit');
+        } else {
+            return $this->fetch('edit_page');
+        }
     }
 
     /**

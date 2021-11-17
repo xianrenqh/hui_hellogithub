@@ -49,6 +49,19 @@
                                 <td>site_keyword</td>
                             </tr>
                             <tr>
+                                <td>模板风格</td>
+                                <td>
+                                    <div class="layui-input-inline" style="width: 200px">
+                                        <select name="site_theme" id="site_theme">
+                                            {volist name='theme_list' id='vo'}
+                                            <option value="{$vo.value}" {if($data.site_theme==$vo.value)}selected{/if}>{$vo.name}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>site_theme</td>
+                            </tr>
+                            <tr>
                                 <td>网站版权信息</td>
                                 <td>
                                     <input type="text" name="site_copyright" value="{$data.site_copyright}"

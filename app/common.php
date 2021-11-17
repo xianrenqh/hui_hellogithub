@@ -4,6 +4,8 @@ use think\facade\Db;
 use app\common\service\AuthService;
 use app\admin\library\LibAuthService;
 
+//模板目录
+define('TEMPLATE_PATH', ROOT_PATH.'view'.DS.'index'.DS);
 /**
  * 返回带协议的域名
  */
@@ -51,6 +53,30 @@ if ( ! function_exists('check_auth')) {
         $Auth = AuthService::instance();
 
         return $Auth->check($rule_name, cmf_get_admin_id());
+    }
+}
+
+/**
+ * 获取文件目录列表,该方法返回数组
+ */
+if ( ! function_exists('getDir')) {
+    function getDir($dir)
+    {
+        $dirArray[] = null;
+        if (false != ($handle = opendir($dir))) {
+            $i = 0;
+            while (false !== ($file = readdir($handle))) {
+                //去掉"“.”、“..”以及带“.xxx”后缀的文件
+                if ($file != "." && $file != ".." && ! strpos($file, ".")) {
+                    $dirArray[$i] = $file;
+                    $i++;
+                }
+            }
+            //关闭句柄
+            closedir($handle);
+        }
+
+        return $dirArray;
     }
 }
 

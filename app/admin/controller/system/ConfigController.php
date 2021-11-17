@@ -30,7 +30,10 @@ class ConfigController extends AdminController
     {
         $datalist = ConfigModel::select()->toArray();
         $data     = array_column($datalist, 'value', 'name');
+
+        $theme_list = self::getSonTemplete();
         $this->assign('data', $data);
+        $this->assign('theme_list', $theme_list);
 
         return $this->fetch();
     }
@@ -108,7 +111,7 @@ class ConfigController extends AdminController
         $id   = $this->request->param('id');
         $data = ConfigModel::where('id', $id)->where('type', 99)->find();
         if (empty($data)) {
-            return json(['code'=>0,'msg'=>'获取数据失败']);
+            return json(['code' => 0, 'msg' => '获取数据失败']);
         }
         if ($this->request->isPost()) {
             $param = $this->request->post();
@@ -156,6 +159,27 @@ class ConfigController extends AdminController
         $id = $this->request->param('id');
         ConfigModel::where('id', $id)->delete();
         $this->success('操作成功');
+    }
+
+    //获取子级模板
+    private function getSonTemplete()
+    {
+        $template_path = ROOT_PATH.'view'.DS.'index';
+        $list          = getDir($template_path);
+        $dirList       = [];
+        foreach ($list as $li) {
+            $customDir = $template_path.'/'.$li;
+            if (is_dir($customDir) && ! strstr($li, '.')) {
+                if (file_exists($customDir.'/config.php')) {
+                    $config    = include($customDir.'/config.php');
+                    $dirList[] = ['value' => $li] + $config;
+                } else {
+                    $dirList[] = ['value' => $li, 'name' => $li];
+                }
+            }
+        }
+
+        return $dirList;
     }
 
 }
