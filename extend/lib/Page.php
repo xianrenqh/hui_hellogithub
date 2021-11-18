@@ -40,7 +40,7 @@ class Page
         $this->total_rows  = $total_rows;
         $this->list_rows   = $list_rows;
         $this->total_page  = ceil($this->total_rows / $this->list_rows);
-        $this->now_page    = !empty(input('page')) ? intval(input('page')) : 1;
+        $this->now_page    = ! empty(input('page')) ? intval(input('page')) : 1;
         $this->now_page    = $this->now_page > 0 ? $this->now_page : 1;
         $this->parameter   = empty($parameter) ? $_GET : $parameter;
         $this->url_rule    = defined('LIST_URL') && LIST_URL ? true : false;
@@ -60,6 +60,7 @@ class Page
         /*if ($this->url_rule) {
             return $this->_list_url();
         }*/
+
         return url(request()->action(), $this->parameter);
     }
 
@@ -194,40 +195,14 @@ class Page
     }
 
     /**
-     * 获取前端列表分页URL
-     * 暂时没用
+     * 分页显示
+     *
+     * @param $string
      */
-    private function _list_url()
+    public function pages($total)
     {
-
-        // 如果为后台批量生成栏目
-        if (defined('ADMIN_CREATE_HTML')) {
-            if ( ! defined('TOTAL_PAGE')) {
-                define('TOTAL_PAGE', $this->total_page);
-            }
-            $catdir = getcache('update_html_catdir_'.$_SESSION['adminid']);
-
-            return SITE_URL.$catdir.'/'.$this->page_prefix.'_PAGE.html';
-        }
-
-        $parameter   = '';
-        $request_url = trim(str_replace(C('url_html_suffix'), '', $_SERVER['REQUEST_URI']), '/');
-
-        // 支持传入自定义参数  ?aa=1&bb=2
-        $pos = strpos($request_url, '?');
-        if ($pos) {
-            $parameter   = substr($request_url, $pos);
-            $request_url = trim(substr($request_url, 0, $pos), '/');
-        }
-        $pos = strpos($request_url, '/'.$this->page_prefix);
-        if ($pos) {
-            $request_url = substr($request_url, 0, $pos);
-        }
-        if (SITE_PATH == '/') {
-            return SITE_URL.$request_url.'/'.$this->page_prefix.'_PAGE'.C('url_html_suffix').$parameter;
-        }
-
-        return SERVER_PORT.HTTP_HOST.'/'.$request_url.'/'.$this->page_prefix.'_PAGE'.C('url_html_suffix').$parameter;
+        //当前页：$this->page->getpage();
+        return '<span class="pageinfo">共<strong>'.$this->total().'</strong>页<strong>'.$total.'</strong>条记录</span>'.$this->getfull();
     }
 
 }

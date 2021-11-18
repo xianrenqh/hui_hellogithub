@@ -938,3 +938,146 @@ function list_sort_by($list, $field, $sortby = 'asc')
 
     return false;
 }
+
+/**
+ * 返回经addslashes处理过的字符串或数组
+ *
+ * @param $string 需要处理的字符串或数组
+ *
+ * @return mixed
+ */
+if ( ! function_exists('new_addslashes')) {
+    function new_addslashes($string)
+    {
+        if ( ! is_array($string)) {
+            return addslashes($string);
+        }
+        foreach ($string as $key => $val) {
+            $string[$key] = new_addslashes($val);
+        }
+
+        return $string;
+    }
+}
+
+/**
+ * 转换数据为HTML代码
+ *
+ * @param $data 数组
+ *
+ * @return bool|string
+ */
+if ( ! function_exists('arr_to_html')) {
+    function arr_to_html($data)
+    {
+        if (is_array($data)) {
+            $str = 'array(';
+            foreach ($data as $key => $val) {
+                if (is_array($val)) {
+                    $str .= "'$key'=>".arr_to_html($val).",";
+                } else {
+                    //如果是变量的情况
+                    if (strpos($val, '$') === 0) {
+                        $str .= "'$key'=>$val,";
+                    } else {
+                        if (preg_match("/^([a-zA-Z_].*)\(/i", $val, $matches)) {
+                            //判断是否使用函数
+                            if (function_exists($matches[1])) {
+                                $str .= "'$key'=>$val,";
+                            } else {
+                                $str .= "'$key'=>'".newAddslashes($val)."',";
+                            }
+                        } else {
+                            $str .= "'$key'=>'".newAddslashes($val)."',";
+                        }
+                    }
+                }
+            }
+
+            return $str.')';
+        }
+
+        return false;
+    }
+}
+
+/**
+ * 返回经addslashes处理过的字符串或数组
+ *
+ * @param $string 需要处理的字符串或数组
+ *
+ * @return array|string
+ */
+if ( ! function_exists('newAddslashes')) {
+    function newAddslashes($string)
+    {
+        if ( ! is_array($string)) {
+            return addslashes($string);
+        }
+        foreach ($string as $key => $val) {
+            $string[$key] = newAddslashes($val);
+        }
+
+        return $string;
+    }
+}
+
+/**
+ * 根据PHP各种类型变量生成唯一标识号
+ *
+ * @param mixed $mix 变量
+ *
+ * @return string
+ */
+if ( ! function_exists('to_guid_string')) {
+    function to_guid_string($mix)
+    {
+        if (is_object($mix)) {
+            return spl_object_hash($mix);
+        } elseif (is_resource($mix)) {
+            $mix = get_resource_type($mix).strval($mix);
+        } else {
+            $mix = serialize($mix);
+        }
+
+        return md5($mix);
+    }
+}
+
+
+/**
+ * 兼容低版本的array_column
+ *
+ * @param  $array      多维数组
+ * @param  $column_key 需要返回值的列
+ * @param  $index_key  可选。作为返回数组的索引/键的列。
+ *
+ * @return array       返回一个数组，数组的值为输入数组中某个单一列的值。
+ */
+function hui_array_column($array, $column_key, $index_key = null)
+{
+    if (function_exists('array_column')) {
+        return array_column($array, $column_key, $index_key);
+    }
+
+    $result = array();
+    foreach ($array as $key => $value) {
+        if ( ! is_array($value)) {
+            continue;
+        }
+        if ($column_key) {
+            if ( ! isset($value[$column_key])) {
+                continue;
+            }
+            $tmp = $value[$column_key];
+        } else {
+            $tmp = $value;
+        }
+        if ($index_key) {
+            $key = isset($value[$index_key]) ? $value[$index_key] : $key;
+        }
+        $result[$key] = $tmp;
+    }
+
+    return $result;
+}

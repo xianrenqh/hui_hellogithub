@@ -129,6 +129,73 @@ data-delete：删除询问对话框
 
 ~~~
 
+
+### 前端模板标签
+#### 0、通用标签
+~~~
+//调用模板标签
+{include file='index/index'}
+
+//调用栏目ID为1的栏目名称及链接
+<a href="{:get_category(1, 'url')}">{:get_category(1, 'cate_name')}</a>
+
+~~~
+#### 1、万能标签
+
+~~~
+{huicmf:get sql="SELECT * FROM cmf_article" order="id desc" limit="2" return="data" page="$page"}
+{volist name='data' id='vo'}
+{$vo.title}<br>
+{/volist}
+{$pages|raw}
+~~~
+
+~~~
+{huicmf:get table="article" limit="2" page="$page" return="data"}
+{volist name='data' id='vo'}
+{$vo.title}<br>
+{/volist}
+<!--分页-->
+{$pages|raw}
+~~~
+
+#### 2、获取栏目导航
+
+~~~
+{huicmf:nav field="id,cate_name,parent_id,cate_en,type" where="parent_id=0" limit="20" return="data"}
+{volist name="data" id="v"}
+<li>
+    <a href="{$v.url}" target="_blank">{$v.cate_name}</a>
+    {if $v['parent_id']!=$v['id']}
+    {php} $r = get_childcat($v['id']);{/php}
+    <ul class="sub_nav">
+        {volist name='r' id='v'}
+        <li><a href="{$v.url}">{$v.cate_name}</a></li>
+        {/volist}
+    </ul>
+    {/if}
+</li>
+{/volist}
+~~~
+
+#### 3、友情链接标签
+
+~~~
+{huicmf:link field="url,name" typeid="0" limit="20"}
+{volist name='data' id='vo'}
+<li><a href="{$vo.url}" target="_blank">{$vo.name}</a></li>
+{/volist}
+~~~
+
+#### 4、调用栏目ID为1的栏目下的二级栏目
+~~~
+{php}$data = get_childcat(12);dump($data);{/php}
+{foreach $data as $key=>$vo }
+{$vo.id}:{$vo.cate_name}
+{/foreach}
+~~~
+
+
 ## 特别感谢
 
 以下项目排名不分先后
