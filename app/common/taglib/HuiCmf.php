@@ -17,9 +17,10 @@ class HuiCmf extends TagLib
     public $page, $total;
 
     protected $tags = [
-        'nav'  => ['attr' => 'field,order,limit,where', 'close' => 0],
-        'get'  => ['attr' => 'sql,table,where,limit,typeid,return', 'close' => 0],
-        'link' => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'nav'   => ['attr' => 'field,order,limit,where', 'close' => 0],
+        'get'   => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
+        'lists' => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
+        'link'  => ['attr' => 'field,typeid,limit,return', 'close' => 0],
     ];
 
     public function tagNav($tag, $content)
@@ -47,7 +48,7 @@ class HuiCmf extends TagLib
             return $parseStr;
         }
 
-        return;
+        return false;
     }
 
     /**
@@ -74,6 +75,72 @@ class HuiCmf extends TagLib
         if ( ! empty($parseStr)) {
             return $parseStr;
         }
+
+        return false;
+    }
+
+    /**
+     * 列表标签
+     *
+     * @param $tag
+     * @param $content
+     */
+    public function tagLists($tag, $content)
+    {
+        $field    = isset($tag['field']) ? $tag['field'] : '*';
+        $limit    = isset($tag['limit']) ? $tag['limit'] : '10';
+        $typeid   = isset($tag['typeid']) ? $tag['typeid'] : '';
+        $whereStr = isset($tag['where']) ? $tag['where'] : '';
+        $strPage  = $tag['page'] = (isset($tag['page'])) ? ((substr($tag['page'], 0,
+                1) == '$') ? $tag['page'] : (int)$tag['page']) : 0;
+        //数据返回变量
+        $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
+        $order  = "is_top desc,update_time desc,id desc";
+        $where  = '`status`=1';
+        if ( ! empty($whereStr)) {
+            $where .= " and ".$whereStr;
+        }
+        if ( ! empty($typeid)) {
+            if (strpos($typeid, '$') === 0) {
+                $typeid = getCateId();
+                $where  .= " and type_id=".$typeid;
+            } else {
+                $where .= " and type_id in (".$typeid.")";
+            }
+        }
+        if ( ! empty($field)) {
+            if (strstr($field, '*')) {
+                $fieldStr = "a.*";
+            } else {
+                $v1 = [];
+                foreach (explode(',', $field) as $v) {
+                    $v1[] = "a.".$v;
+                }
+                $fieldStr = implode(',', $v1);
+            }
+        }
+        //拼接php代码
+        $parseStr = '<?php ';
+        $parseStr .= '';
+        if ($strPage) {
+            $parseStr .= '$total=\think\facade\Db::name("article")->where("'.$where.'")->count();';
+            $parseStr .= '$Page = new \lib\Page($total,'.$limit.',0);';
+            $parseStr .= '$limitStr = $Page->limit();';
+            $parseStr .= '$first  = explode(",", $limitStr)[0];';
+            $parseStr .= '$limit  = explode(",", $limitStr)[1];';
+            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit($first,$limit)->select()->toArray();';
+            $parseStr .= '$pages=$Page->pages($total);';
+        } else {
+            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit("'.$limit.'")->select()->toArray();';
+            $parseStr .= '$pages="";';
+        }
+        $parseStr .= ' ?>';
+        $parseStr .= $content;
+        if ( ! empty($parseStr)) {
+            return $parseStr;
+        }
+
+        return false;
     }
 
     /**
@@ -171,7 +238,7 @@ class HuiCmf extends TagLib
             return $parseStr;
         }
 
-        return;
+        return false;
     }
 
 }

@@ -1,4 +1,3 @@
-
 hui_hellogithub
 
 把自己在浏览 GitHub 过程中，发现的有意思、高质量、容易上手的项目收集起来，这样便于以后查找和学习。并把这些有意思、有价值的开源项目分享给大家。最后就写了这个网站，便于查看和分享。
@@ -10,7 +9,7 @@ hui_hellogithub
 > 运行环境要求PHP7.1+，兼容PHP8.0。
 >
 > 数据库要求：mysql5.5+，推荐5.7。
-> 
+>
 > 编辑器使用了 editor.md | UEeditor | icEditor
 >
 by:xiaohuihui
@@ -111,8 +110,7 @@ data-confirm：普通询问对话框
 data-delete：删除询问对话框
 
 - data-reload="1"  刷新父级页面【例如点击编辑按钮弹出窗口后保存或者关闭窗口在列表页（父级）页面刷新。默认不写或者 data-reload="0"为不刷新】
-- data-reload="2"  刷新当前页面【例如点击编辑按钮弹出窗口后保存或者关闭窗口在当前页面刷新。默认不写或者 data-reload="0"为不刷新】
-【实例：】
+- data-reload="2"  刷新当前页面【例如点击编辑按钮弹出窗口后保存或者关闭窗口在当前页面刷新。默认不写或者 data-reload="0"为不刷新】 【实例：】
 
 ~~~
 //弹出层打开:width:90%，height:80%
@@ -129,9 +127,10 @@ data-delete：删除询问对话框
 
 ~~~
 
-
 ### 前端模板标签
+
 #### 0、通用标签
+
 ~~~
 //调用模板标签
 {include file='index/index'}
@@ -140,10 +139,11 @@ data-delete：删除询问对话框
 <a href="{:get_category(1, 'url')}">{:get_category(1, 'cate_name')}</a>
 
 ~~~
+
 #### 1、万能标签
 
 ~~~
-{huicmf:get sql="SELECT * FROM cmf_article" order="id desc" limit="2" return="data" page="$page"}
+{huicmf:get sql="SELECT * FROM cmf_article" order="id desc" limit="2" return="data" page="1"
 {volist name='data' id='vo'}
 {$vo.title}<br>
 {/volist}
@@ -151,7 +151,7 @@ data-delete：删除询问对话框
 ~~~
 
 ~~~
-{huicmf:get table="article" limit="2" page="$page" return="data"}
+{huicmf:get table="article" limit="2" page="1" return="data"}
 {volist name='data' id='vo'}
 {$vo.title}<br>
 {/volist}
@@ -188,6 +188,7 @@ data-delete：删除询问对话框
 ~~~
 
 #### 4、调用栏目ID为1的栏目下的二级栏目
+
 ~~~
 {php}$data = get_childcat(12);dump($data);{/php}
 {foreach $data as $key=>$vo }
@@ -195,6 +196,21 @@ data-delete：删除询问对话框
 {/foreach}
 ~~~
 
+#### 5、获取栏目下的列表数据（带分页）
+
+**typeid里面的值：**
+
+1、带 $ 符号，则默认自动获取对应栏目id
+
+2、其他则为字符串，多条用 , 隔开。如： typeid="2,3"
+
+~~~
+{huicmf:lists field="*" limit="10" page="1" return="data" typeid="$type_id"}
+{volist name='data' id='vo'}
+{$vo.title} | {$vo.create_time|date='Y-m-d H:i:s'}<br>
+{/volist}
+{$pages|raw}
+~~~
 
 ## 特别感谢
 

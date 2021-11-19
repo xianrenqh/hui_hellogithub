@@ -9,6 +9,7 @@
                     <li class="layui-this">基本选项</li>
                     <li>SEO设置</li>
                     <li>栏目模板</li>
+                    <li>单页面内容</li>
                 </ul>
                 <div class="layui-tab-content">
                     <div class="layui-tab-item layui-show">
@@ -85,9 +86,19 @@
                             </div>
                         </div>
                     </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单页内容</label>
+                            <div class="layui-input-block" id="contentEditorHtml" style="z-index: 0">
+                                {php}echo lib\Form::editor('content',$val='', 'width:100%;height:400px');{/php}
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
+            <input type="hidden" id="type" name="type" value="2">
 
             <div class="layui-form-item">
                 <div class="layui-input-block">

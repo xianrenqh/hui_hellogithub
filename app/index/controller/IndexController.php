@@ -23,19 +23,20 @@ class IndexController extends BaseController
 
     public function p()
     {
-        $data = \think\facade\Db::name("category")->field("id,cate_name,parent_id,cate_en,type")->where("parent_id=0 AND `show_in_nav`=1")->order("sort_order ASC")->limit(20)->select()->toArray();
-        if ( ! empty($data)) {
-            for ($i = 0; $i < count($data); $i++) {
-                $data[$i]['url'] = buildCatUrl($data[$i]['cate_en']);
-            }
-        }
-
-        halt($data);
-
+        $total    = \think\facade\Db::name("article")->where("`status`=1 and type_id in (6,11)")->count();
+        $Page     = new \lib\Page($total, 10, 0);
+        $limitStr = $Page->limit();
+        $first    = explode(",", $limitStr)[0];
+        $limit    = explode(",", $limitStr)[1];
+        $data     = \think\facade\Db::name("article")->field("a.*,c.cate_name,c.cate_en")->alias("a")->leftJoin("category c",
+            "c.id = a.type_id")->where("`status`=1 and type_id in (6,11)")->limit($first, $limit)->select()->toArray();
+        $pages    = $Page->pages($total);
+        dump($data);
     }
 
     public function test()
     {
+
         return $this->fetch();
     }
 }

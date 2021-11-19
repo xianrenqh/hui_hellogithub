@@ -5,7 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<a href="{:get_category(1, 'url')}">{:get_category(1, 'cate_name')}</a>
+<hr>
+{huicmf:lists field="*" limit="10" page="1" return="data" typeid="6"}
+{php}dump($data);{/php}
+
 <hr>
 
 

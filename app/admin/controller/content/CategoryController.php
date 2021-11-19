@@ -90,7 +90,9 @@ class CategoryController extends AdminController
             if ( ! empty($row)) {
                 $this->error('栏目名称en已经存在啦，请重新输入');
             }
-            $param['setting'] = serialize($param['setting']);
+            if ( ! empty($param['setting'])) {
+                $param['setting'] = serialize($param['setting']);
+            }
 
             $save = $this->model->save($param);
             if ($save) {
@@ -111,8 +113,10 @@ class CategoryController extends AdminController
 
         if ( ! empty($type) && $type == 1) {
             return $this->fetch('add');
-        } else {
+        } elseif ( ! empty($type) && $type == 2) {
             return $this->fetch('add_page');
+        } else {
+            return $this->fetch('add_link');
         }
     }
 
@@ -132,7 +136,9 @@ class CategoryController extends AdminController
             if ( ! empty($row) && $row['id'] != $param['id']) {
                 $this->error('栏目名称en已经存在啦，请重新输入');
             }
-            $param['setting'] = serialize($param['setting']);
+            if ( ! empty($param['setting'])) {
+                $param['setting'] = serialize($param['setting']);
+            }
 
             $save = $this->model->update($param, ['id' => $param['id']]);
             if ($save) {

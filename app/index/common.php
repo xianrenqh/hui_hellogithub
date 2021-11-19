@@ -7,6 +7,22 @@
  * Info:
  */
 
+/***
+ * 获取当前栏目ID
+ * @return mixed
+ */
+function getCateId()
+{
+    if (\think\facade\Request::has('catid')) {
+        $result = (int)\think\facade\Request::param('catid');
+    } else {
+        $catDir = \think\facade\Request::param('catdir');
+        $result = \think\facade\Db::name('category')->where('cate_en', $catDir)->value('id');
+    }
+
+    return $result;
+}
+
 /**
  * 获取栏目信息
  *
