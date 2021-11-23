@@ -1,6 +1,9 @@
 <!doctype html>
 <html>
 {include file='index/header'}
+<link rel="stylesheet"
+      href="__LIB__/highlight/qtcreator_dark.min.css?t=1637660364191">
+<script src="__LIB__/highlight/highlight.min.js"></script>
 <article>
     {include file='index/nav'}
     <div class="box_l">
@@ -115,5 +118,18 @@
     </aside>
 </article>
 <a href="#" title="返回顶部" class="icon-top"></a>
+
+<script>
+  hljs.initHighlightingOnLoad();
+  var e = document.querySelectorAll("code");
+  var e_len = e.length;
+  var i;
+  for (i = 0; i < e_len; i++) {
+    e[i].innerHTML = "<ul><li>" + e[i].innerHTML.replace(/\n/g, "\n</li><li>") + "\n</li></ul>";
+  }
+
+
+</script>
+
 </body>
 </html>
