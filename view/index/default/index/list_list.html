@@ -38,38 +38,28 @@
         <section>
             <h2>站长推荐</h2>
             <ul class="news_part03">
-                <li><a href="/life/4.html" title="平凡生活中自见伟大,快手上的他们无不传递着温暖" target="_blank"><i><img src="/skin/html/images/b11.jpg" alt="平凡生活中自见伟大,快手上的他们无不传递着温暖"></i><p>平凡生活中自见伟大,快手上的他们无不传递着温暖</p></a></li>
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5" order="rand()" return="data" /}
+                {volist name='data' id='vo'}
+                <li>
+                    <a href="{$vo.url}" title="{$vo.title}">
+                        <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                        <p>{$vo.title}</p></a>
+                </li>
+                {/volist}
             </ul>
         </section>
         <section>
             <h2>热门点击</h2>
             <ul class="news_part06">
-                <li><a href="/life/12.html" title="人生就是越努力越幸运！" target="_blank">人生就是越努力越幸运！</a></li><li><a href="/life/7.html" title="世界上最永恒的幸福就是平凡，人生中最长久的拥有就是珍惜。" target="_blank">世界上最永恒的幸福就是平凡，人生中最长久的拥有就是珍惜。</a></li><li><a href="/life/4.html" title="平凡生活中自见伟大,快手上的他们无不传递着温暖" target="_blank">平凡生活中自见伟大,快手上的他们无不传递着温暖</a></li>
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits" typeid="$catid" return="data" /}
+                {volist name='data' id='vo'}
+                <li>
+                    <a href="{$vo.url}" title="{$vo.title}" >{$vo.title}</a>
+                </li>
+                {/volist}
             </ul>
         </section>
-        <section>
-            <h2>猜你喜欢</h2>
-            <ul class="news_part05">
-                <li><a href="/love/9.html" title="追梦路上邂逅爱情,他们携手改写平凡人生!" target="_blank"><i><img src="/skin/html/images/b02.jpg" alt="追梦路上邂逅爱情,他们携手改写平凡人生!"></i>
-                    <p>追梦路上邂逅爱情,他们携手改写平凡人生!</p>
-                </a></li>
-                <li><a href="/life/4.html" title="平凡生活中自见伟大,快手上的他们无不传递着温暖" target="_blank"><i><img src="/skin/html/images/b11.jpg" alt="平凡生活中自见伟大,快手上的他们无不传递着温暖"></i>
-                    <p>平凡生活中自见伟大,快手上的他们无不传递着温暖</p>
-                </a></li>
-                <li><a href="/sun/10.html" title="遇见你,是我平凡人生中最美的事情" target="_blank"><i><img src="/skin/html/images/b10.jpg" alt="遇见你,是我平凡人生中最美的事情"></i>
-                    <p>遇见你,是我平凡人生中最美的事情</p>
-                </a></li>
-                <li><a href="/meet/2.html" title="旅行的意义是什么?这是我见过最美的答案" target="_blank"><i><img src="/skin/html/images/b09.jpg" alt="旅行的意义是什么?这是我见过最美的答案"></i>
-                    <p>旅行的意义是什么?这是我见过最美的答案</p>
-                </a></li>
-                <li><a href="/meet/5.html" title="因为旅行，可以为平凡的生活加点料，挽救日渐枯萎的心。" target="_blank"><i><img src="/skin/html/images/b12.jpg" alt="因为旅行，可以为平凡的生活加点料，挽救日渐枯萎的心。"></i>
-                    <p>因为旅行，可以为平凡的生活加点料，挽救日渐枯萎的心。</p>
-                </a></li>
-                <li><a href="/love/6.html" title="因为爱情,让这座城市无可替代" target="_blank"><i><img src="/skin/html/images/b06.jpg" alt="因为爱情,让这座城市无可替代"></i>
-                    <p>因为爱情,让这座城市无可替代</p>
-                </a></li>
-            </ul>
-        </section>
+
         {include file='index/footer'}
     </aside>
 </article>

@@ -173,6 +173,7 @@ class HuiCmf extends TagLib
         $limit    = isset($tag['limit']) ? $tag['limit'] : '10';
         $typeid   = isset($tag['typeid']) ? $tag['typeid'] : '';
         $flag     = isset($tag['flag']) ? $tag['flag'] : '';
+        $thumb    = isset($tag['thumb']) ? $tag['thumb'] : 0;
         $whereStr = isset($tag['where']) ? $tag['where'] : '';
         $strPage  = $tag['page'] = (isset($tag['page'])) ? ((substr($tag['page'], 0,
                 1) == '$') ? $tag['page'] : (int)$tag['page']) : 0;
@@ -182,6 +183,8 @@ class HuiCmf extends TagLib
         $order  = isset($tag['order']) ? $tag['order'] : 'is_top DESC,update_time DESC,id DESC';
         if ( ! empty($order) && $order == 'rand()') {
             $orderStr = 'orderRaw("rand(),id desc")';
+        } elseif ( ! empty($order) && $order == 'hits') {
+            $orderStr = 'order("click desc")';
         } else {
             $orderStr = 'order("'.$order.'")';
         }
@@ -210,6 +213,9 @@ class HuiCmf extends TagLib
         }
         if ( ! empty($flag)) {
             $where .= " and flag in (".$flag.")";
+        }
+        if ( ! empty($thumb)) {
+            $where .= " and image<>''";
         }
         //拼接php代码
         $parseStr = '<?php ';

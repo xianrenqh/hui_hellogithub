@@ -194,6 +194,7 @@ __STATIC_INDEX__
 ~~~
 
 #### 3、友情链接标签
+
 > 栏目导航有缓存，3600秒；修改后需要清除缓存才能生效
 
 ~~~
@@ -218,16 +219,17 @@ __STATIC_INDEX__
 
 1、带 $ 符号，则默认自动获取对应栏目id
 
-2、其他则为字符串，多条用 , 隔开。如： typeid="2,3"
+2、其他则为字符串，多条用 , 隔开。如： typeid="2,3"；如果默认获取当前栏目：typeid="$catid"
 
 3、默认order排序方式：is_top DESC,update_time DESC,id DESC；
 
 随机排序：order="rand()"
+点击量排序：order="hits"
 
-4、flag属性
+4、flag属性 5、thumb属性： 当 thumb="1"时；只获取带有缩略图的数据
 
 ~~~
-{huicmf:lists field="*" limit="10" page="1" return="data" order="rand()" flag="1" typeid="$catid" /}
+{huicmf:lists field="*" limit="10" page="1" return="data" order="rand()" flag="1" hits="1" typeid="$catid" /}
 {volist name='data' id='vo'}
 {$vo.title} | {$vo.create_time|date='Y-m-d H:i:s'}<br>
 {$vo.image|default='/static/water/nopic.jpeg'}<br>
@@ -248,6 +250,7 @@ __STATIC_INDEX__
 ~~~
 
 #### 7、内容页tag标签
+
 > 栏目导航有缓存，3600秒；修改后需要清除缓存才能生效
 
 ~~~

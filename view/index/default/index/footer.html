@@ -1,4 +1,18 @@
 <section>
+    <h2>猜你喜欢</h2>
+    <ul class="news_part05">
+        {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="6" order="rand()" thumb="1" return="data" /}
+        {volist name='data' id='vo'}
+        <li>
+            <a href="{$vo.url}" title="{$vo.title}">
+                <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                <p>{$vo.title}</p>
+            </a>
+        </li>
+        {/volist}
+    </ul>
+</section>
+<section>
     <h2>友情链接</h2>
     <ul class="links">
         {huicmf:link field="url,name" typeid="0" limit="20" return="links"}
