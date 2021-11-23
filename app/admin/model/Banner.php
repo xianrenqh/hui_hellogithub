@@ -9,7 +9,16 @@
 
 namespace app\admin\model;
 
-class Banner
+use app\admin\model\BannerType;
+
+class Banner extends TimeModel
 {
+
+    public function getType()
+    {
+        $list = BannerType::select();
+
+        return $list;
+    }
 
 }
