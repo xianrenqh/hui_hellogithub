@@ -18,6 +18,8 @@ use lib\HuiTpl;
 class BaseController
 {
 
+    use \app\common\traits\JumpTrait;
+
     /**
      * 构造方法
      * @access public

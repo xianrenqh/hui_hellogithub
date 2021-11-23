@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<nav>
+    <div class="topnav"><a href="/" class="logo"><img src="__STATIC_INDEX__images/logo.png"></a>
+        <ul id="starlist">
+            <li><a href="/" title="" {if ($catid eq 0)}id="selected"{/if}>网站首页</a></li>
+            {huicmf:nav field="id,cate_name,parent_id,cate_en,type" where="parent_id=0" limit="20" return="data"}
+            {volist name="data" id="v"}
+            <li><a href="{$v.url}" title="{$v.cate_name}" {if ($v.id eq $catid)}id="selected"{/if}>{$v.cate_name}</a></li>
+            {/volist}
+        </ul>
+    </div>
+    <span></span>
+</nav>

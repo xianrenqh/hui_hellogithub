@@ -42,7 +42,7 @@ class Page
         $this->total_page  = ceil($this->total_rows / $this->list_rows);
         $this->now_page    = ! empty(input('page')) ? intval(input('page')) : 1;
         $this->now_page    = $this->now_page > 0 ? $this->now_page : 1;
-        $this->parameter   = empty($parameter) ? $_GET : $parameter;
+        $this->parameter   = empty($parameter) ? input() : $parameter;
         $this->url_rule    = defined('LIST_URL') && LIST_URL ? true : false;
         $this->page_prefix = defined('PAGE_PREFIX') ? PAGE_PREFIX : 'list';
         $this->url         = $this->geturl();
@@ -56,12 +56,11 @@ class Page
         unset($this->parameter['m'], $this->parameter['c'], $this->parameter['a']);
         $this->parameter['page'] = 'PAGE';
 
-        //使用路由的时候做配置
-        /*if ($this->url_rule) {
-            return $this->_list_url();
-        }*/
+        $appName    = (app('http')->getName());
+        $controller = request()->controller(true);
+        $action     = request()->action(true);
 
-        return url(request()->action(), $this->parameter);
+        return url($appName."/".$controller."/".$action, $this->parameter);
     }
 
     /**

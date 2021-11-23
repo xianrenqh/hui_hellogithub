@@ -9,7 +9,7 @@
 
 namespace app\admin\model;
 
-class BannerType
+class BannerType extends TimeModel
 {
 
 }

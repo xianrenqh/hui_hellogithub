@@ -606,8 +606,7 @@ if ( ! function_exists('array2level')) {
  */
 if ( ! function_exists('str_cut')) {
     function str_cut($string, $length, $dot = '...', $code = 'utf-8')
-    {
-        $strlen = strlen($string);
+    {$strlen = strlen($string);
         if ($strlen <= $length) {
             return $string;
         }
@@ -623,7 +622,8 @@ if ( ! function_exists('str_cut')) {
             '&lt;',
             '&gt;',
             '&middot;',
-            '&hellip;'
+            '&hellip;',
+            '\r\n'
         ), array('∵', ' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $string);
         $strcut = '';
         if ($code == 'utf-8') {

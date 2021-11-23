@@ -44,7 +44,7 @@ class CategoryController extends AdminController
         parent::__construct($app);
         $this->model = new Category();
         //取得当前内容模型模板存放目录
-        $this->themePath = TEMPLATE_PATH.(empty(get_config('site_theme')) ? "default" : get_config('site_theme'));
+        $this->themePath = TEMPLATE_PATH.(empty(get_config('site_theme')) ? "default" : get_config('site_theme')).DS.'index';
         //取得栏目频道模板列表
         $this->categoryTemplate = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'category*'));
         $this->listTemplate     = str_replace($this->themePath.DS, '', glob($this->themePath.DS.'list*'));

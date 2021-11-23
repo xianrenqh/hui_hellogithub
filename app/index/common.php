@@ -23,6 +23,13 @@ function getCateId()
     return $result;
 }
 
+function getCateName()
+{
+    $getNameArr = get_category(getCateId());
+
+    return $getNameArr;
+}
+
 /**
  * 获取栏目信息
  *
@@ -36,7 +43,8 @@ function get_category($catid = '', $parameter = '')
     $categoryinfo = \think\facade\Db::name('category')->order('sort_order ASC, id ASC')->select()->toArray();
     if ( ! empty($categoryinfo)) {
         for ($i = 0; $i < count($categoryinfo); $i++) {
-            $categoryinfo[$i]['url'] = buildCatUrl($categoryinfo[$i]['cate_en']);
+            $categoryinfo[$i]['url']   = buildCatUrl($categoryinfo[$i]['cate_en']);
+            $categoryinfo[$i]['child'] = ! empty(getChild($categoryinfo, $categoryinfo[$i]['id'])) ? 1 : 0;
         }
     }
     if ($catid) {
@@ -52,6 +60,22 @@ function get_category($catid = '', $parameter = '')
         return $categoryinfo;
     }
 
+}
+
+//获取子集
+function getChild($array, $myid, $parent_str = 'parent_id')
+{
+    $newarr = [];
+    foreach ($array as $value) {
+        if ( ! isset($value['id'])) {
+            continue;
+        }
+        if ($value[$parent_str] == $myid) {
+            $newarr[$value['id']] = $value;
+        }
+    }
+
+    return $newarr;
 }
 
 /**
@@ -70,12 +94,10 @@ function buildCatUrl($cat, $url = '', $suffix = true, $domain = false)
 }
 
 //创建内容链接
-function buildContentUrl($cat, $id, $url = '', $suffix = true, $domain = false)
+function buildContentUrl($id, $url = '', $suffix = true, $domain = false)
 {
-    $field = is_numeric($cat) ? 'catid' : 'catdir';
-
     if (empty($url)) {
-        $data = __url('index/index/shows', [$field => $cat, 'id' => $id], $suffix, $domain);
+        $data = __url('index/index/show', ['id' => $id], $suffix, $domain);
     } else {
         $data = (strpos($url, '://') !== false) ? $url : __url($url);
     }
@@ -109,3 +131,24 @@ function get_childcat($catid, $is_show = false, $limit = 0)
     return $limit ? array_slice($r, 0, $limit) : $r;
 }
 
+/**
+ * 当前路径
+ * 返回指定栏目路径层级
+ *
+ * @param $catid  栏目id
+ * @param $symbol 栏目间隔符
+ */
+function catpos($catid, $symbol = ' &gt; ')
+{
+    if (get_category($catid) == false) {
+        return '';
+    }
+    //获取当前栏目的 父栏目列表
+    $arrparentid = array_filter(explode(',', get_category($catid, 'parent_id').','.$catid));
+    foreach ($arrparentid as $cid) {
+        $parsestr[] = '<a href="'.get_category($cid, 'url').'" >'.get_category($cid, 'cate_name').'</a>';
+    }
+    $parsestr = implode($symbol, $parsestr);
+
+    return $parsestr;
+}

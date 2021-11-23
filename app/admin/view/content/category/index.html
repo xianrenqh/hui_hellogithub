@@ -39,7 +39,7 @@
 </script>
 <script type="text/html" id="optionTpl">
     <a class="layui-btn layui-btn-xs layui-btn-normal {if !check_auth('content.category/add')}layui-hide{/if}"
-       data-open="{:__url('content.category/add')}?id={{d.id}}"
+       data-open="{:__url('content.category/add')}?id={{d.id}}&type={{d.type}}"
        data-title="添加下级" data-full="true" data-reload="2">添加下级</a>
     <a class="layui-btn layui-btn-xs layui-btn-success {if !check_auth('content.category/edit')}layui-hide{/if}"
        data-open="{:__url('content.category/edit')}?id={{d.id}}&type={{d.type}}"

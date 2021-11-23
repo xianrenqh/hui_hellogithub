@@ -135,15 +135,28 @@ data-delete：删除询问对话框
 //调用模板标签
 {include file='index/index'}
 
+//模板调用css、js等：
+__STATIC_INDEX__
+例如：__STATIC_INDEX__css/base.css
+
 //调用栏目ID为1的栏目名称及链接
 <a href="{:get_category(1, 'url')}">{:get_category(1, 'cate_name')}</a>
+
+//调用地步版权信息：
+{:get_config('site_copyright')}
+
+//字符串截取
+{:str_cut($vo.description, 20)}
+
+//获取当前位置面包屑导航
+<a href="{$siteurl}">首页</a>&gt; {:catpos($catid)}
 
 ~~~
 
 #### 1、万能标签
 
 ~~~
-{huicmf:get sql="SELECT * FROM cmf_article" order="id desc" limit="2" return="data" page="1"
+{huicmf:get sql="SELECT * FROM cmf_article" order="id desc" limit="2" return="data" page="1"}
 {volist name='data' id='vo'}
 {$vo.title}<br>
 {/volist}
@@ -161,11 +174,13 @@ data-delete：删除询问对话框
 
 #### 2、获取栏目导航
 
+> 栏目导航有缓存，3600秒；修改后需要清除缓存才能生效
+
 ~~~
 {huicmf:nav field="id,cate_name,parent_id,cate_en,type" where="parent_id=0" limit="20" return="data"}
 {volist name="data" id="v"}
 <li>
-    <a href="{$v.url}" target="_blank">{$v.cate_name}</a>
+    <a href="{$v.url}" target="_blank" title="{$v.cate_name}" {if ($v.id eq $catid)}class="selected"{/if}>{$v.cate_name}</a>
     {if $v['parent_id']!=$v['id']}
     {php} $r = get_childcat($v['id']);{/php}
     <ul class="sub_nav">
@@ -179,6 +194,7 @@ data-delete：删除询问对话框
 ~~~
 
 #### 3、友情链接标签
+> 栏目导航有缓存，3600秒；修改后需要清除缓存才能生效
 
 ~~~
 {huicmf:link field="url,name" typeid="0" limit="20"}
@@ -204,12 +220,41 @@ data-delete：删除询问对话框
 
 2、其他则为字符串，多条用 , 隔开。如： typeid="2,3"
 
+3、默认order排序方式：is_top DESC,update_time DESC,id DESC；
+
+随机排序：order="rand()"
+
+4、flag属性
+
 ~~~
-{huicmf:lists field="*" limit="10" page="1" return="data" typeid="$type_id"}
+{huicmf:lists field="*" limit="10" page="1" return="data" order="rand()" flag="1" typeid="$catid" /}
 {volist name='data' id='vo'}
 {$vo.title} | {$vo.create_time|date='Y-m-d H:i:s'}<br>
+{$vo.image|default='/static/water/nopic.jpeg'}<br>
+{:__url('show',['id'=>$vo.id])}
+{:__url('lists',['catdir'=>$vo.cate_en])}
+<br>
 {/volist}
 {$pages|raw}
+~~~
+
+#### 6、轮播图标签
+
+~~~
+{huicmf:banner field="*" typeid="0" limit="20"}
+{volist name='data' id='vo'}
+<li><a href="{$vo.url}" target="_blank"><img src="{$vo.image}" alt="{$vo.title}"></a></li>
+{/volist}
+~~~
+
+#### 7、内容页tag标签
+> 栏目导航有缓存，3600秒；修改后需要清除缓存才能生效
+
+~~~
+{huicmf:centent_tag id="$id" limit="10" return="tags"/}
+{volist name="tags" id="vo"}
+    <a href="{:__url('index/index/tags',['tag'=>$vo.tag])}" target="_blank">{$vo.tag}</a>
+{/volist}
 ~~~
 
 ## 特别感谢

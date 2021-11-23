@@ -31,8 +31,8 @@ return [
 
     // 字符替换
     'tpl_replace_string' => [
-        '__STATIC_ADMIN__' => Env::get('easyadmin.static_path', '/static/admin'),
-        '__STATIC_INDEX__' => Env::get('easyadmin.static_path', '/static/index'),
-        '__LIB__'          => Env::get('easyadmin.static_path', '/static/lib'),
+        '__STATIC_ADMIN__' => '/static/admin',
+        '__STATIC_INDEX__' => '/static/index/'.get_config('site_theme').'/',
+        '__LIB__'          => '/static/lib',
     ]
 ];

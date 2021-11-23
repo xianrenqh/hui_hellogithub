@@ -9,18 +9,22 @@
 
 namespace app\common\taglib;
 
+use app\portal\controller\DumpTestController;
 use think\template\TagLib;
 
+const CACHE = 3600;
 class HuiCmf extends TagLib
 {
 
     public $page, $total;
 
     protected $tags = [
-        'nav'   => ['attr' => 'field,order,limit,where', 'close' => 0],
-        'get'   => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
-        'lists' => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
-        'link'  => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'nav'         => ['attr' => 'field,order,limit,where', 'close' => 0],
+        'link'        => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'banner'      => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'get'         => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
+        'lists'       => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
+        'centent_tag' => ['attr', 'limit,return', 'close' => 0],
     ];
 
     public function tagNav($tag, $content)
@@ -33,14 +37,19 @@ class HuiCmf extends TagLib
         $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
 
         $where .= '`show_in_nav`=1';
-        //拼接php代码
+
         $parseStr = '<?php ';
+        $parseStr .= 'if(cache("indexCategory")):';
+        $parseStr .= '$'.$return.' = cache("indexCategory");';
+        $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("category")->field("'.$field.'")->where("'.$where.'")->order("'.$order.'")->limit('.$limit.')->select()->toArray();';
         $parseStr .= 'if ( ! empty($'.$return.')) {';
         $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
         $parseStr .= ' $'.$return.'[$i][\'url\'] = buildCatUrl($'.$return.'[$i][\'cate_en\']);';
+        $parseStr .= '  }';
         $parseStr .= ' }';
-        $parseStr .= '}';
+        $parseStr .= 'cache("indexCategory", $'.$return.', '.CACHE.');';
+        $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
 
@@ -68,7 +77,80 @@ class HuiCmf extends TagLib
         }
         //拼接php代码
         $parseStr = '<?php ';
+        $parseStr .= 'if(cache("indexLink_'.$typeid.'")):';
+        $parseStr .= '$'.$return.' = cache("indexLink_'.$typeid.'");';
+        $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("link")->field("'.$field.'")->where("'.$where.'")->order("listorder asc")->limit('.$limit.')->select()->toArray();';
+        $parseStr .= 'cache("indexLink_'.$typeid.'", $'.$return.', '.CACHE.');';
+        $parseStr .= 'endif;';
+        $parseStr .= ' ?>';
+        $parseStr .= $content;
+
+        if ( ! empty($parseStr)) {
+            return $parseStr;
+        }
+
+        return false;
+    }
+
+    /*
+     * 内容页Tag标签
+     */
+    public function tagCentent_tag($tag, $content)
+    {
+        $limit = isset($tag['limit']) ? $tag['limit'] : '20';
+        $id    = isset($tag['id']) ? $tag['id'] : '';
+        //数据返回变量
+        $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
+        $where  = "1=1";
+        if ( ! empty($id)) {
+            $where .= " and aid=".$id;
+        }
+        //拼接php代码
+        $parseStr = '<?php ';
+        $parseStr .= 'if(cache("contentTags_$id")):';
+        $parseStr .= '$'.$return.' = cache("contentTags_$id");';
+        $parseStr .= 'else: ';
+        $parseStr .= '$'.$return.'=\think\facade\Db::name("tag")->field("t.tag")->alias("t")->leftJoin("tag_content c","c.tagid=t.id")->where("'.$where.'")->limit('.$limit.')->select()->toArray();';
+        $parseStr .= 'cache("contentTags_$id", $'.$return.', '.CACHE.');';
+        $parseStr .= 'endif;';
+        $parseStr .= ' ?>';
+        $parseStr .= $content;
+        if ( ! empty($parseStr)) {
+            return $parseStr;
+        }
+
+        return false;
+    }
+
+    /**
+     * 轮播图标签
+     *
+     * @param $tag
+     * @param $content
+     *
+     * @return false|string
+     */
+    public function tagBanner($tag, $content)
+    {
+        $field  = isset($tag['field']) ? $tag['field'] : '*';
+        $limit  = isset($tag['limit']) ? $tag['limit'] : '5';
+        $typeid = isset($tag['typeid']) ? $tag['typeid'] : '';
+        //数据返回变量
+        $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
+
+        $where = '`status`=1';
+        if ( ! empty($typeid)) {
+            $where .= " and typeid=".$typeid;
+        }
+        //拼接php代码
+        $parseStr = '<?php ';
+        $parseStr .= 'if(cache("indexBanner")):';
+        $parseStr .= '$'.$return.' = cache("indexBanner");';
+        $parseStr .= 'else: ';
+        $parseStr .= '$'.$return.'=\think\facade\Db::name("banner")->field("'.$field.'")->where("'.$where.'")->order("listorder asc")->limit('.$limit.')->select()->toArray();';
+        $parseStr .= 'cache("indexBanner", $'.$return.', '.CACHE.');';
+        $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
 
@@ -90,22 +172,29 @@ class HuiCmf extends TagLib
         $field    = isset($tag['field']) ? $tag['field'] : '*';
         $limit    = isset($tag['limit']) ? $tag['limit'] : '10';
         $typeid   = isset($tag['typeid']) ? $tag['typeid'] : '';
+        $flag     = isset($tag['flag']) ? $tag['flag'] : '';
         $whereStr = isset($tag['where']) ? $tag['where'] : '';
         $strPage  = $tag['page'] = (isset($tag['page'])) ? ((substr($tag['page'], 0,
                 1) == '$') ? $tag['page'] : (int)$tag['page']) : 0;
+
         //数据返回变量
         $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
-        $order  = "is_top desc,update_time desc,id desc";
-        $where  = '`status`=1';
+        $order  = isset($tag['order']) ? $tag['order'] : 'is_top DESC,update_time DESC,id DESC';
+        if ( ! empty($order) && $order == 'rand()') {
+            $orderStr = 'orderRaw("rand(),id desc")';
+        } else {
+            $orderStr = 'order("'.$order.'")';
+        }
+
+        $where = '`status`=1';
         if ( ! empty($whereStr)) {
             $where .= " and ".$whereStr;
         }
         if ( ! empty($typeid)) {
             if (strpos($typeid, '$') === 0) {
-                $typeid = getCateId();
-                $where  .= " and type_id=".$typeid;
+                $where .= " and `type_id`=$typeid";
             } else {
-                $where .= " and type_id in (".$typeid.")";
+                $where .= " and `type_id` in (".$typeid.")";
             }
         }
         if ( ! empty($field)) {
@@ -119,6 +208,9 @@ class HuiCmf extends TagLib
                 $fieldStr = implode(',', $v1);
             }
         }
+        if ( ! empty($flag)) {
+            $where .= " and flag in (".$flag.")";
+        }
         //拼接php代码
         $parseStr = '<?php ';
         $parseStr .= '';
@@ -128,12 +220,21 @@ class HuiCmf extends TagLib
             $parseStr .= '$limitStr = $Page->limit();';
             $parseStr .= '$first  = explode(",", $limitStr)[0];';
             $parseStr .= '$limit  = explode(",", $limitStr)[1];';
-            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit($first,$limit)->select()->toArray();';
+            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit($first,$limit)->'.$orderStr.'->select()->toArray();';
+            $parseStr .= 'if($total>$limit):';
             $parseStr .= '$pages=$Page->pages($total);';
+            $parseStr .= 'else: ';
+            $parseStr .= '$pages="";';
+            $parseStr .= 'endif;';
         } else {
-            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit("'.$limit.'")->select()->toArray();';
+            $parseStr .= '$'.$return.'=\think\facade\Db::name("article")->field("'.$fieldStr.',c.cate_name,c.cate_en")->alias("a")->leftJoin("category c","c.id = a.type_id")->where("'.$where.'")->limit("'.$limit.'")->'.$orderStr.'->select()->toArray();';
             $parseStr .= '$pages="";';
         }
+        $parseStr .= 'if ( ! empty($'.$return.')) {';
+        $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
+        $parseStr .= ' $'.$return.'[$i][\'url\'] = buildContentUrl($'.$return.'[$i][\'id\']);';
+        $parseStr .= ' }';
+        $parseStr .= '}';
         $parseStr .= ' ?>';
         $parseStr .= $content;
         if ( ! empty($parseStr)) {
