@@ -140,10 +140,9 @@ nav span { width: 100%; display: block; height: 20px }
 
 .container blockquote {
     margin: 32px 0;
-    background: url(../images/quote.png) no-repeat -75px -20px #E0F8E6;
+    background: url(../images/quote.png) no-repeat -75px -20px #f3d3b9b5;
     border-radius: 10px;
     padding: 20px 50px;
-    border-left: 3px solid #e2dfdf;
     color: #555;
 }
 .container blockquote a {
@@ -152,4 +151,8 @@ nav span { width: 100%; display: block; height: 20px }
 }
 .container blockquote p {
      font-family: Microsoft YaHei; font-size: 15px
+}
+.content_blockquote blockquote{
+    background: url(../images/quote.png) no-repeat -75px -20px #E0F8E6;
+    border-left: 3px solid #e2dfdf;
 }

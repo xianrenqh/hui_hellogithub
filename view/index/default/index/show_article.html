@@ -35,12 +35,15 @@
                 {$info.content|raw}
             </div>
 
-            <blockquote>
-                <p>
+            <div class="content_blockquote">
+                <blockquote>
+                    <p>
                     <span>转载请标明出处：<a href="{$page_url}" target="_blank">{$page_url}</a>
                         <br>作者：小灰灰 <br>欢迎转载。</span>
-                </p>
-            </blockquote>
+                    </p>
+                </blockquote>
+            </div>
+
 
             <div class="tags">
                 {huicmf:centent_tag id="$id" limit="10" return="tags"/}
