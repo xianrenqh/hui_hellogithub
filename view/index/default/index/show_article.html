@@ -7,10 +7,40 @@
         <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; {:catpos($catid)}</div>
         <div class="container">
             <h1>{$info.title}</h1>
-            <div class="info"><span>作者：{$info.nickname}</span><span>日期：{$info.update_time|date="Y-m-d H:i:s"}</span><span>点击：{$info.click}</span></div>
+            <div class="info">
+                <span>作者：{$info.nickname}</span><span>日期：{$info.update_time|date="Y-m-d H:i:s"}</span><span>点击：{$info.click}</span>
+            </div>
+            <div class="github_info">
+                <div class="github_url">
+                    <p>Github地址：</p>
+                    <a href="{$info.git_url}" target="_blank" rel="nofollow">{$info.git_url}</a>
+                </div>
+                <div class="github_icon clear">
+                    <p>Github icon：</p>
+                    <ul>
+                        <li>
+                            <a href="{$info.git_url}" rel="nofollow" target="_blank">{$stars|raw}</a>
+                        </li>
+                        <li>
+                            <a href="{$info.git_url}" rel="nofollow" target="_blank">{$forks|raw}</a>
+                        </li>
+                        <li>
+                            <a href="{$info.git_url}" rel="nofollow" target="_blank">{$watchs|raw}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="content">
                 {$info.content|raw}
             </div>
+
+            <blockquote>
+                <p>
+                    <span>转载请标明出处：<a href="{$page_url}" target="_blank">{$page_url}</a>
+                        <br>作者：小灰灰 <br>欢迎转载。</span>
+                </p>
+            </blockquote>
 
             <div class="tags">
                 {huicmf:centent_tag id="$id" limit="10" return="tags"/}
@@ -26,7 +56,8 @@
         <div class="otherlink">
             <h2 class="news_t">相关文章</h2>
             <ul>
-                <li><a href="/sun/3.html" title="2020:努力工作,向生活重新出发!">2020:努力工作,向生活重新出发!</a></li>      </ul>
+                <li><a href="/sun/3.html" title="2020:努力工作,向生活重新出发!">2020:努力工作,向生活重新出发!</a></li>
+            </ul>
         </div>
         <div class="pinglun-box">
             <h2 class="news_t">文章评论</h2>
@@ -40,7 +71,10 @@
     <aside class="box_r">
         <div class="search">
             <form action="/e/search/index.php" method="post" name="searchform" id="searchform">
-                <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+                <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
+                       style="color: rgb(153, 153, 153);"
+                       onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                       onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
                 <input name="show" value="title" type="hidden">
                 <input name="tempid" value="1" type="hidden">
                 <input name="tbname" value="news" type="hidden">
@@ -50,7 +84,8 @@
         <section>
             <h2>站长推荐</h2>
             <ul class="news_part03">
-                {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5" order="rand()" return="data" /}
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5"
+                order="rand()" return="data" /}
                 {volist name='data' id='vo'}
                 <li>
                     <a href="{$vo.url}" title="{$vo.title}">
@@ -63,10 +98,11 @@
         <section>
             <h2>热门点击</h2>
             <ul class="news_part06">
-                {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits" typeid="$catid" return="data" /}
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits"
+                typeid="$catid" return="data" /}
                 {volist name='data' id='vo'}
                 <li>
-                    <a href="{$vo.url}" title="{$vo.title}" >{$vo.title}</a>
+                    <a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a>
                 </li>
                 {/volist}
             </ul>

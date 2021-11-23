@@ -151,6 +151,36 @@ class IndexController extends BaseController
         $pre  = ! empty($pre) ? '<a href="'.buildContentUrl($pre['id']).'">'.$pre['title'].'</a>' : '已经是第一篇啦';
         $next = ! empty($next) ? '<a href="'.buildContentUrl($next['id']).'">'.$next['title'].'</a>' : '已经是最后一篇啦';
 
+        $watchs = "";
+        $forks  = "";
+        $stars  = "";
+        //获取github|gitee的fork、watch、star等信息
+        if ( ! empty($data['git_url'])) {
+            if (strstr($data['git_url'], 'github')) {
+                $vowels  = [
+                    'https://github.com/',
+                    'https://www.github.com/',
+                    'https//www.github.com/',
+                    'http://www.github.com/'
+                ];
+                $githubN = str_replace($vowels, '', $data['git_url']);
+                $watchs  = '<img alt="GitHub watchers badge" src="https://img.shields.io/github/watchers/'.$githubN.'?logo=github">';
+                $forks   = '<img alt="GitHub watchers badge" src="https://img.shields.io/github/forks/'.$githubN.'?logo=github">';
+                $stars   = '<img alt="GitHub watchers badge" src="https://img.shields.io/github/stars/'.$githubN.'?logo=github">';
+            } else {
+                $vowels  = [
+                    'https://gitee.com/',
+                    'https://www.gitee.com/',
+                    'https//www.gitee.com/',
+                    'http://www.gitee.com/'
+                ];
+                $githubN = str_replace($vowels, '', $data['git_url']);
+                $forks   = '<img alt="GitHub watchers badge" src="https://gitee.com/'.$githubN.'/badge/fork.svg?theme=dark">';
+                $stars   = '<img alt="GitHub watchers badge" src="https://gitee.com/'.$githubN.'/badge/star.svg?theme=dark">';
+                $watchs  = '';
+            }
+        }
+        $pageUrl = get_config('site_url').__url('index/index/show', ['id' => $id]);
         $this->assign('id', $id);
         $this->assign('catid', $catId);
         $this->assign('seo_title', $seo_title);
@@ -159,6 +189,10 @@ class IndexController extends BaseController
         $this->assign('info', $data);
         $this->assign('pre', $pre);
         $this->assign('next', $next);
+        $this->assign('watchs', $watchs);
+        $this->assign('forks', $forks);
+        $this->assign('stars', $stars);
+        $this->assign('page_url', $pageUrl);
 
         return $this->fetch($template);
     }
