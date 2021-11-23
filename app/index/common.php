@@ -86,6 +86,7 @@ function buildCatUrl($cat, $url = '', $suffix = true, $domain = false)
     $field = is_numeric($cat) ? 'catid' : 'catdir';
     if (empty($url)) {
         $data = __url('index/index/lists', [$field => $cat], $suffix, $domain);
+        $data = str_replace("/index.php", "", $data);
     } else {
         $data = (strpos($url, '://') !== false) ? $url : __url($url);
     }

@@ -46,6 +46,7 @@ class HuiCmf extends TagLib
         $parseStr .= 'if ( ! empty($'.$return.')) {';
         $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
         $parseStr .= ' $'.$return.'[$i][\'url\'] = buildCatUrl($'.$return.'[$i][\'cate_en\']);';
+        $parseStr .= ' $'.$return.'[$i][\'url\'] = str_replace("/index.php","",$'.$return.'[$i][\'url\']);';
         $parseStr .= '  }';
         $parseStr .= ' }';
         $parseStr .= 'cache("indexCategory", $'.$return.', '.CACHE.');';
