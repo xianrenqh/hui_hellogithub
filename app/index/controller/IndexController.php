@@ -137,12 +137,28 @@ class IndexController extends BaseController
         $keywords    = $data['keywords'];
         $description = $data['description'];
 
+        //获取相同分类的上一篇/下一篇内容
+        $pre  = Db::name('article')->field('id,title')->where([
+            ['id', '<', $id],
+            ['type_id', '=', $catId],
+            ['status', '=', 1]
+        ])->order('id DESC')->find();
+        $next = Db::name('article')->field('id,title')->where([
+            ['id', '>', $id],
+            ['type_id', '=', $catId],
+            ['status', '=', 1]
+        ])->order('id ASC')->find();
+        $pre  = ! empty($pre) ? '<a href="'.buildContentUrl($pre['id']).'">'.$pre['title'].'</a>' : '已经是第一篇啦';
+        $next = ! empty($next) ? '<a href="'.buildContentUrl($next['id']).'">'.$next['title'].'</a>' : '已经是最后一篇啦';
+
         $this->assign('id', $id);
         $this->assign('catid', $catId);
         $this->assign('seo_title', $seo_title);
         $this->assign('keywords', $keywords);
         $this->assign('description', $description);
         $this->assign('info', $data);
+        $this->assign('pre', $pre);
+        $this->assign('next', $next);
 
         return $this->fetch($template);
     }

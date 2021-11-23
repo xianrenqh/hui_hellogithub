@@ -151,6 +151,9 @@ __STATIC_INDEX__
 //获取当前位置面包屑导航
 <a href="{$siteurl}">首页</a>&gt; {:catpos($catid)}
 
+//上一篇、下一篇
+上一篇：{$pre|raw}
+下一篇：{$next|raw}
 ~~~
 
 #### 1、万能标签
