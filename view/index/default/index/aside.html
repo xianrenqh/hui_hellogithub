@@ -52,7 +52,7 @@
     <section>
         <h2>热门标签</h2>
         <ul class="tags">
-            {huicmf:tag limit="20" return="tags"}
+            {huicmf:tag limit="25" return="tags" /}
             {volist name='tags' id='vo'}
             <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
             {/volist}
