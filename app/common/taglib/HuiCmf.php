@@ -24,6 +24,7 @@ class HuiCmf extends TagLib
         'banner'      => ['attr' => 'field,typeid,limit,return', 'close' => 0],
         'get'         => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
         'lists'       => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
+        'tag'         => ['attr', 'limit,return', 'close' => 0],
         'centent_tag' => ['attr', 'limit,return', 'close' => 0],
     ];
 
@@ -83,6 +84,41 @@ class HuiCmf extends TagLib
         $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("link")->field("'.$field.'")->where("'.$where.'")->order("listorder asc")->limit('.$limit.')->select()->toArray();';
         $parseStr .= 'cache("indexLink_'.$typeid.'", $'.$return.', '.CACHE.');';
+        $parseStr .= 'endif;';
+        $parseStr .= ' ?>';
+        $parseStr .= $content;
+
+        if ( ! empty($parseStr)) {
+            return $parseStr;
+        }
+
+        return false;
+    }
+
+    /**
+     * 全站tag标签云
+     *
+     * @param $tag
+     * @param $content
+     *
+     * @return false|string
+     */
+    public function tagTag($tag, $content)
+    {
+        $limit = isset($tag['limit']) ? $tag['limit'] : '20';
+        //数据返回变量
+        $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
+
+        //拼接php代码
+        $parseStr = '<?php ';
+        $parseStr .= 'if(cache("indexTagsAll")):';
+        $parseStr .= '$'.$return.' = cache("indexTagsAll");';
+        $parseStr .= 'else: ';
+        $parseStr .= '$'.$return.'=\think\facade\Db::name("tag")->field("tag,total")->orderRaw("rand(),id desc")->limit('.$limit.')->select()->toArray();';
+        $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
+        $parseStr .= ' $'.$return.'[$i][\'url\'] = __url("index/index/tags",[\'tag\'=>$'.$return.'[$i][\'tag\']]);';
+        $parseStr .= ' }';
+        $parseStr .= 'cache("indexTagsAll", $'.$return.', '.CACHE.');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;

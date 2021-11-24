@@ -268,6 +268,14 @@ __STATIC_INDEX__
 {/volist}
 ~~~
 
+#### 8、全站tag标签
+~~~
+{huicmf:tag limit="20" return="tags"}
+{volist name='tags' id='vo'}
+    <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
+{/volist}
+~~~
+
 ## 特别感谢
 
 以下项目排名不分先后

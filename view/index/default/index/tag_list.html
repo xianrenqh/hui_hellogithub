@@ -27,37 +27,7 @@
             {$pages|raw}
         </div>
     </div>
-    <aside class="box_r">
-        {include file='index/right_search'}
-        <section>
-            <h2>站长推荐</h2>
-            <ul class="news_part03">
-                {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5"
-                order="rand()" return="data" /}
-                {volist name='data' id='vo'}
-                <li>
-                    <a href="{$vo.url}" title="{$vo.title}">
-                        <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
-                        <p>{$vo.title}</p></a>
-                </li>
-                {/volist}
-            </ul>
-        </section>
-        <section>
-            <h2>热门点击</h2>
-            <ul class="news_part06">
-                {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits"
-                typeid="$catid" return="data" /}
-                {volist name='data' id='vo'}
-                <li>
-                    <a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a>
-                </li>
-                {/volist}
-            </ul>
-        </section>
-
-        {include file='index/footer'}
-    </aside>
+    {include file='index/aside'}
 </article>
 <a href="#" title="返回顶部" class="icon-top"></a>
 </body>

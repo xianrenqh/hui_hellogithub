@@ -1,0 +1,79 @@
+<aside class="box_r">
+    <div class="search">
+        <form action="{:__url('index/index/search')}" method="post" name="searchform" id="searchform">
+            <input name="keyword" id="keyboard" class="input_text" value="请输入关键字词"
+                   style="color: rgb(153, 153, 153);"
+                   onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                   onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+            <input name="show" value="title" type="hidden">
+            <input class="input_submit" value="搜索" type="submit">
+        </form>
+    </div>
+    <section>
+        <h2>站长推荐</h2>
+        <ul class="news_part03">
+            {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5" order="rand()" return="data" /}
+            {volist name='data' id='vo'}
+            <li>
+                <a href="{$vo.url}" title="{$vo.title}">
+                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                    <p>{$vo.title}</p></a>
+            </li>
+            {/volist}
+        </ul>
+    </section>
+    <section>
+        <h2>热门点击</h2>
+        <ul class="news_part06">
+            {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits" return="data" /}
+            {volist name='data' id='vo'}
+            <li>
+                <a href="{$vo.url}" title="{$vo.title}" >{$vo.title}</a>
+            </li>
+            {/volist}
+        </ul>
+    </section>
+
+    <section>
+        <h2>猜你喜欢</h2>
+        <ul class="news_part05">
+            {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="6" order="rand()" thumb="1" return="data" /}
+            {volist name='data' id='vo'}
+            <li>
+                <a href="{$vo.url}" title="{$vo.title}">
+                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                    <p>{$vo.title}</p>
+                </a>
+            </li>
+            {/volist}
+        </ul>
+    </section>
+    <section>
+        <h2>热门标签</h2>
+        <ul class="tags">
+            {huicmf:tag limit="20" return="tags"}
+            {volist name='tags' id='vo'}
+            <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
+            {/volist}
+        </ul>
+    </section>
+    <section>
+        <h2>友情链接</h2>
+        <ul class="links">
+            {huicmf:link field="url,name" typeid="0" limit="20" return="links"}
+            {volist name='links' id='vo'}
+            <li><a href="{$vo.url}" target="_blank">{$vo.name}</a></li>
+            {/volist}
+        </ul>
+    </section>
+    <section>
+        <ul class="copyright">
+            <p>版权所有：</p>
+            <p>{$site.site_copyright}</p>
+            <p>技术支持：<a href="https://xiaohuihui.net.cn/" target="_blank">小灰灰</a></p>
+            <p><a href="/sitemap.xml" target="_blank">XML网站地图</a> <a href="/all/index.html" target="_blank">往期文章</a>
+            </p>
+            <p>备案号：<a href="http://www.beian.miit.gov.cn/" target="_blank">{$site.site_beian}</a></p>
+        </ul>
+    </section>
+</aside>
