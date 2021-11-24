@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+{include file='index/header'}
+<article>
+    {include file='index/nav'}
+    <div class="box_l">
+        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; tag列表</div>
+        <div class="search_tips">
+            <b>Tag标签：<span>{$keyword}</span> 搜索结果：<span>{$total}</span> 条</b>
+        </div>
+        <ul class="news_list">
+            {volist name='list' id='vo'}
+            <li>
+                <a href="{$vo.url}" title="{$vo.title}">
+                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                    <h2>{$vo.title}</h2>
+                </a>
+                <p class="news_list_info">{$vo.description}</p>
+                <p class="news_list_time">
+                    <span><a href="{:__url('index/index/lists',['catdir'=>$vo.cate_en])}">{$vo.cate_name}</a></span>
+                    <span>时间：{$vo.update_time|date='Y-m-d'}</span><span>点击：{$vo.click}</span>
+                </p>
+            </li>
+            {/volist}
+        </ul>
+        <div class="pagelist">
+            {$pages|raw}
+        </div>
+    </div>
+    <aside class="box_r">
+        {include file='index/right_search'}
+        <section>
+            <h2>站长推荐</h2>
+            <ul class="news_part03">
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5"
+                order="rand()" return="data" /}
+                {volist name='data' id='vo'}
+                <li>
+                    <a href="{$vo.url}" title="{$vo.title}">
+                        <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                        <p>{$vo.title}</p></a>
+                </li>
+                {/volist}
+            </ul>
+        </section>
+        <section>
+            <h2>热门点击</h2>
+            <ul class="news_part06">
+                {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits"
+                typeid="$catid" return="data" /}
+                {volist name='data' id='vo'}
+                <li>
+                    <a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a>
+                </li>
+                {/volist}
+            </ul>
+        </section>
+
+        {include file='index/footer'}
+    </aside>
+</article>
+<a href="#" title="返回顶部" class="icon-top"></a>
+</body>
+</html>

@@ -216,8 +216,38 @@ class IndexController extends BaseController
      */
     public function tags()
     {
-        $tag = $this->request->param('tag');
-        dump($tag);
+        $tag       = $this->request->param('tag');
+        $contentId = Db::name('tag_content')->alias('c')->leftJoin('tag t', 't.id=c.tagid')->where('t.tag',
+            $tag)->column('aid');
+
+        $pages    = "";
+        $total    = Db::name('article')->where('status', 1)->whereIn('id', $contentId)->count();
+        $limit    = 10;
+        $Page     = new Page($total, $limit, 0);
+        $limitStr = $Page->limit();
+        $first    = explode(",", $limitStr)[0];
+        $limit    = explode(",", $limitStr)[1];
+
+        $list = Db::name('article')->field('a.id,a.title,a.type_id,a.image,a.description,a.click,a.update_time,c.cate_name,c.cate_en')->alias("a")->leftJoin("category c",
+            "c.id = a.type_id")->where('status', 1)->whereIn('a.id', $contentId)->limit($first,
+            $limit)->select()->toArray();
+        if ($total > $limit) {
+            $pages = $Page->pages($total);
+        }
+        for ($i = 0; $i < count($list); $i++) {
+            $list[$i]['url'] = buildContentUrl($list[$i]['id']);
+        }
+
+        $this->assign('list', $list);
+        $this->assign('pages', $pages);
+        $this->assign('seo_title', $this->seo_title);
+        $this->assign('keywords', $this->keywords);
+        $this->assign('description', $this->description);
+        $this->assign('catid', 0);
+        $this->assign('total', $total);
+        $this->assign('keyword', $tag);
+
+        return $this->fetch('tag_list');
     }
 
     /**
