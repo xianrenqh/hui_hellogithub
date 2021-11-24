@@ -4,10 +4,12 @@
 <article>
     {include file='index/nav'}
     <div class="box_l">
-        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; {:catpos($catid)}</div>
+        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; 搜索结果页</div>
+        <div class="search_tips">
+            <b>搜索关键词：<span>{$keyword}</span>   搜索结果：<span>{$total}</span> 条</b>
+        </div>
         <ul class="news_list">
-            {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" typeid="$catid" return="data" page="1" /}
-            {volist name='data' id='vo'}
+            {volist name='list' id='vo'}
             <li>
                 <a href="{$vo.url}" title="{$vo.title}">
                     <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>

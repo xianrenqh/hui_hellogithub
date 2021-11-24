@@ -11,7 +11,7 @@ namespace app\index\controller;
 
 use app\index\BaseController;
 use think\facade\Db;
-use think\Container;
+use lib\Page;
 
 const CACHE = 3600;
 
@@ -211,10 +211,55 @@ class IndexController extends BaseController
         $this->site        = $site;
     }
 
+    /**
+     * tag标签
+     */
     public function tags()
     {
         $tag = $this->request->param('tag');
         dump($tag);
+    }
+
+    /**
+     * 搜索
+     */
+    public function search()
+    {
+        $param   = $this->request->param();
+        $keyword = ! empty($param['keyword']) ? $param['keyword'] : '';
+        $where   = "status=1";
+        $list    = [];
+        $pages   = "";
+        $limit   = 10;
+        $total   = 0;
+        if ( ! empty($keyword)) {
+            $where    .= " and title like '%".$keyword."%'";
+            $total    = Db::name('article')->where($where)->count();
+            $Page     = new Page($total, $limit, 0);
+            $limitStr = $Page->limit();
+            $first    = explode(",", $limitStr)[0];
+            $limit    = explode(",", $limitStr)[1];
+
+            $list = Db::name('article')->field('a.id,a.title,a.type_id,a.image,a.description,a.click,a.update_time,c.cate_name,c.cate_en')->alias("a")->leftJoin("category c",
+                "c.id = a.type_id")->where($where)->limit($first, $limit)->select()->toArray();
+            for ($i = 0; $i < count($list); $i++) {
+                $list[$i]['url'] = buildContentUrl($list[$i]['id']);
+            }
+            if ($total > $limit) {
+                $pages = $Page->pages($total);
+            }
+        }
+
+        $this->assign('list', $list);
+        $this->assign('pages', $pages);
+        $this->assign('seo_title', $this->seo_title);
+        $this->assign('keywords', $this->keywords);
+        $this->assign('description', $this->description);
+        $this->assign('catid', 0);
+        $this->assign('total', $total);
+        $this->assign('keyword', $keyword);
+
+        return $this->fetch();
     }
 
     public function p()
