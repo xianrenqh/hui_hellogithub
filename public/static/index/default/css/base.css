@@ -866,3 +866,12 @@ nav span {
     opacity: 1;
     filter: alpha(opacity=100);
 }
+.footer{
+    background: #000;
+    padding: 15px 10px 15px 10px;
+    border-top: solid 3px #ed4040;
+    color: #fff;
+    font-size: 13px;
+    text-align: center;
+}
+.footer a{color:#ccc}

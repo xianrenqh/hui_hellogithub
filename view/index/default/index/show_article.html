@@ -79,8 +79,7 @@
     </div>
     {include file='index/aside'}
 </article>
-<a href="#" title="返回顶部" class="icon-top"></a>
-
+{include file='index/footer'}
 <script>
   hljs.initHighlightingOnLoad();
   var e = document.querySelectorAll("code");
@@ -89,8 +88,6 @@
   for (i = 0; i < e_len; i++) {
     e[i].innerHTML = "<ul><li>" + e[i].innerHTML.replace(/\n/g, "\n</li><li>") + "\n</li></ul>";
   }
-
-
 </script>
 
 </body>

@@ -30,6 +30,7 @@ class ConfigController extends AdminController
     {
         $datalist = ConfigModel::select()->toArray();
         $data     = array_column($datalist, 'value', 'name');
+        $data['site_code'] = htmlspecialchars_decode($data['site_code']);
 
         $theme_list = self::getSonTemplete();
         $this->assign('data', $data);

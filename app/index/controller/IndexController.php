@@ -202,7 +202,8 @@ class IndexController extends BaseController
         if (cache('indexSiteConfig')) {
             $site = cache('indexSiteConfig');
         } else {
-            $site = get_config();
+            $site              = get_config();
+            $site['site_code'] = htmlspecialchars_decode($site['site_code']);
             cache('indexSiteConfig', $site, CACHE);
         }
         $this->seo_title   = $site['site_name'];
