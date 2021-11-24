@@ -626,6 +626,7 @@ nav span {
     width: 100%;
     min-height: 400px;
 }
+.content a{color: #0969da;}
 
 .tags {
     margin: 20px 0;

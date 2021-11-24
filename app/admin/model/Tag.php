@@ -14,7 +14,7 @@ use think\facade\Db;
 class Tag extends TimeModel
 {
 
-    public function tag_dispose($catid, $tags, $aid)
+    public function tag_dispose($catid, $tags, $aid, $type = 'add')
     {
         Db::name('tag_content')->where(['aid' => $aid])->delete();
         $tags = array_unique($tags);
@@ -25,7 +25,9 @@ class Tag extends TimeModel
             $row = Db::name('tag')->where(['tag' => $v])->find();
             if ( ! empty($row)) {
                 $tagid = $row['id'];
-                Db::name('tag')->where(['id' => $tagid])->inc('total')->update();
+                if ($type == 'add') {
+                    Db::name('tag')->where(['id' => $tagid])->inc('total')->update();
+                }
             } else {
                 $tagid = Db::name('tag')->insertGetId([
                     'tag'         => $v,
@@ -39,6 +41,15 @@ class Tag extends TimeModel
                 'aid'   => $aid
             ])->insert();
         }
+    }
+
+    public function tag_del($aid)
+    {
+        $tagIds = Db::name('tag_content')->where(['aid' => $aid])->column('tagid');
+        foreach ($tagIds as $v) {
+            Db::name('tag')->where(['id' => $v])->dec('total')->update();
+        }
+        Db::name('tag_content')->where(['aid' => $aid])->delete();
     }
 
 }

@@ -269,11 +269,54 @@ __STATIC_INDEX__
 ~~~
 
 #### 8、全站tag标签
+
 ~~~
 {huicmf:tag limit="20" return="tags"}
 {volist name='tags' id='vo'}
     <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
 {/volist}
+~~~
+
+## 备注前端页面使用md解析方法：
+
+> 本前端页面默认直接解析md转换后的html，可能和原md直接显示的效果不一样
+
+### 1、引用文件
+
+~~~
+<link rel="stylesheet" href="__LIB__/editor.md-1.5.0/css/editormd.preview.css" />
+<script  src="__LIB__/editor.md-1.5.0/editormd.js"></script>
+<script  src="__LIB__/editor.md-1.5.0/lib/marked.min.js"></script>
+<script  src="__LIB__/editor.md-1.5.0/lib/prettify.min.js"></script>
+<script  src="__LIB__/editor.md-1.5.0/lib/underscore.min.js"></script>
+<script  src="__LIB__/editor.md-1.5.0/lib/flowchart.min.js"></script>
+<script  src="__LIB__/editor.md-1.5.0/lib/jquery.flowchart.min.js"></script>
+~~~
+
+### 2、html
+
+~~~
+<div id="content">
+    <textarea style="display:none;">
+        {$info.content_md|raw}
+    </textarea>
+</div>
+~~~
+
+### 3、js
+
+~~~
+  var testEditor;
+  $(function () {
+    testEditor = editormd.markdownToHTML("content", {//注意：这里是上面DIV的id
+      htmlDecode: "style,script,iframe",
+      emoji: true,
+      taskList: true,
+      tex: true, // 默认不解析
+      flowChart: true, // 默认不解析
+      sequenceDiagram: true, // 默认不解析
+      codeFold: true,
+    });});
 ~~~
 
 ## 特别感谢

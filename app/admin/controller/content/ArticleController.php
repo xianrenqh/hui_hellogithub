@@ -130,7 +130,7 @@ class ArticleController extends AdminController
                 $huiTagsArr = explode(',', $huiTags);
                 if ( ! empty($huiTagsArr)) {
                     $TagModel = new TagModel();
-                    $TagModel->tag_dispose($param['type_id'], $huiTagsArr, $id);
+                    $TagModel->tag_dispose($param['type_id'], $huiTagsArr, $id, 'add');
                 }
 
                 $this->success('保存成功');
@@ -211,7 +211,7 @@ class ArticleController extends AdminController
                     $huiTagsArr = explode(',', $huiTags);
                     if ( ! empty($huiTagsArr)) {
                         $TagModel = new TagModel();
-                        $TagModel->tag_dispose($param['type_id'], $huiTagsArr, $param['id']);
+                        $TagModel->tag_dispose($param['type_id'], $huiTagsArr, $param['id'], 'edit');
                     }
                     $this->success('保存成功');
                 } else {
@@ -251,17 +251,6 @@ class ArticleController extends AdminController
             }
             $this->model->where(['id' => $id])->data(['status' => 0, 'delete_time' => time()])->update();
             $this->success('删除成功');
-        }
-    }
-
-    /**
-     * @NodeAnotation(title="检测违禁词")
-     */
-    public function filter_word()
-    {
-        if($this->request->isPost()){
-            $param = $this->request->param();
-            halt($param);
         }
     }
 

@@ -1,9 +1,11 @@
 <!doctype html>
 <html>
 {include file='index/header'}
-<link rel="stylesheet"
-      href="__LIB__/highlight/qtcreator_dark.min.css?t=1637660364191">
+<link rel="stylesheet" href="__LIB__/highlight/qtcreator_dark.min.css?t=1637660364191">
 <script src="__LIB__/highlight/highlight.min.js"></script>
+
+
+
 <article>
     {include file='index/nav'}
     <div class="box_l">
@@ -88,6 +90,8 @@
   for (i = 0; i < e_len; i++) {
     e[i].innerHTML = "<ul><li>" + e[i].innerHTML.replace(/\n/g, "\n</li><li>") + "\n</li></ul>";
   }
+  $('.content').find('a').attr({target:"_blank",rel:"nofollow"});
+
 </script>
 
 </body>

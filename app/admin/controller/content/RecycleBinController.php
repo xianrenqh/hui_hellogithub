@@ -13,6 +13,7 @@ use app\admin\annotation\ControllerAnnotation;
 use app\admin\annotation\NodeAnotation;
 use app\common\controller\AdminController;
 use app\admin\model\Article as ArticleModel;
+use app\admin\model\Tag as TagModel;
 use think\Exception;
 use think\App;
 
@@ -80,6 +81,8 @@ class RecycleBinController extends AdminController
             }
             try {
                 $this->model->destroy($id, true);
+                $TagModel = new TagModel();
+                $TagModel->tag_del($id);
                 $this->success('删除成功');
             } catch (Exception $e) {
                 $this->error('删除失败'.$e->getMessage());
