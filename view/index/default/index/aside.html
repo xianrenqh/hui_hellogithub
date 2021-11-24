@@ -10,20 +10,7 @@
         </form>
     </div>
     <section>
-        <h2>站长推荐</h2>
-        <ul class="news_part03">
-            {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="5" order="rand()" return="data" /}
-            {volist name='data' id='vo'}
-            <li>
-                <a href="{$vo.url}" title="{$vo.title}">
-                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
-                    <p>{$vo.title}</p></a>
-            </li>
-            {/volist}
-        </ul>
-    </section>
-    <section>
-        <h2>热门点击</h2>
+        <h2>点击排行</h2>
         <ul class="news_part06">
             {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="10" order="hits" return="data" /}
             {volist name='data' id='vo'}
@@ -33,9 +20,22 @@
             {/volist}
         </ul>
     </section>
-
     <section>
-        <h2>猜你喜欢</h2>
+        <h2>站长推荐</h2>
+        <ul class="news_part03">
+            {huicmf:lists field="id,title,type_id,image,description,click,update_time" thumb="1" limit="6" order="rand()" return="data" /}
+            {volist name='data' id='vo'}
+            <li>
+                <a href="{$vo.url}" title="{$vo.title}">
+                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
+                    <p>{$vo.title}</p></a>
+            </li>
+            {/volist}
+        </ul>
+    </section>
+
+    <section style="display: none">
+        <h2>随机文章</h2>
         <ul class="news_part05">
             {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="6" order="rand()" thumb="1" return="data" /}
             {volist name='data' id='vo'}
@@ -48,6 +48,7 @@
             {/volist}
         </ul>
     </section>
+
     <section>
         <h2>热门标签</h2>
         <ul class="tags">
