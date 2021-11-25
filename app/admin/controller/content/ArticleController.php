@@ -125,6 +125,9 @@ class ArticleController extends AdminController
                 $param['update_time'] = time();
                 $id                   = Db::name('article')->strict(false)->insertGetId($param);
 
+                $articleCount = Db::name('article')->where('status', 1)->count();
+                cache('cacheArticleCount', $articleCount);
+
                 //写入tag标签
                 $huiTags    = $param['hui_tags'];
                 $huiTagsArr = explode(',', $huiTags);
@@ -250,6 +253,9 @@ class ArticleController extends AdminController
                 $this->error('获取数据失败');
             }
             $this->model->where(['id' => $id])->data(['status' => 0, 'delete_time' => time()])->update();
+            $articleCount = Db::name('article')->where('status', 1)->count();
+            cache('cacheArticleCount', $articleCount);
+
             $this->success('删除成功');
         }
     }

@@ -114,27 +114,27 @@
                                 <div carousel-item="">
                                     <ul class="grid layui-row layui-col-space10 layui-this">
                                         <li class="layui-col-xs6">
-                                            <a href="" class="new_tab" data-title="管理列表">
-                                                <h2>管理</h2>
-                                                <span class="number-timer">0</span>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs6">
-                                            <a href="" class="new_tab" data-title="会员列表">
-                                                <h2>会员</h2>
-                                                <span class="number-timer">3</span>
-                                            </a>
-                                        </li>
-                                        <li class="layui-col-xs6">
-                                            <a href="javascript:;" class="new_tab" data-title="文章列表">
+                                            <a href="" class="new_tab" data-title="文章列表">
                                                 <h2>文章</h2>
-                                                <span class="number-timer">88</span>
+                                                <span class="number-timer">{$count_info.article_count}</span>
                                             </a>
                                         </li>
                                         <li class="layui-col-xs6">
-                                            <a href="javascript:;" class="new_tab" data-title="商品列表">
-                                                <h2>商品</h2>
-                                                <span class="number-timer">66</span>
+                                            <a href="" class="new_tab" data-title="tag列表">
+                                                <h2>tag标签</h2>
+                                                <span class="number-timer">{$count_info.tag_count}</span>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs6">
+                                            <a href="javascript:;" class="new_tab" data-title="友链列表">
+                                                <h2>友链</h2>
+                                                <span class="number-timer">{$count_info.link_count}</span>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs6">
+                                            <a href="javascript:;" class="new_tab" data-title="评论列表">
+                                                <h2>评论</h2>
+                                                <span class="number-timer">{$count_info.comment_count}</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -251,11 +251,10 @@
 
 {include file='footer'/}
 <script>
-  layui.use(['element', 'carousel', 'layer', 'jquery', 'miniCountUp'], function () {
+  layui.use(['element', 'carousel', 'layer', 'jquery'], function () {
     var $ = layui.jquery;
     var element = layui.element;
     var carousel = layui.carousel;
-    var countUp = layui.miniCountUp;
     layer = layui.layer;
 
     var winWidth = $(window).width();
@@ -273,14 +272,6 @@
         , interval: $(this).data('interval') ? $(this).data('interval') : 3000
       });
     })
-    var count_up = new countUp({
-      target: $('.number-timer'),
-      startVal: 5, //目标开始的值，默认值为0
-      endVal: 1000, //到达目标值,默认值为元素的值
-      decimals: 0, //小数位数，默认值为0
-      duration: 2, //动画持续时间为秒，默认值为2
-    });
-    count_up.start();
 
   })
 

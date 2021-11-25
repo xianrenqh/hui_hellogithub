@@ -25,9 +25,7 @@ class Tag extends TimeModel
             $row = Db::name('tag')->where(['tag' => $v])->find();
             if ( ! empty($row)) {
                 $tagid = $row['id'];
-                if ($type == 'add') {
-                    Db::name('tag')->where(['id' => $tagid])->inc('total')->update();
-                }
+                Db::name('tag')->where(['id' => $tagid])->inc('total')->update();
             } else {
                 $tagid = Db::name('tag')->insertGetId([
                     'tag'         => $v,
@@ -40,6 +38,8 @@ class Tag extends TimeModel
                 'tagid' => $tagid,
                 'aid'   => $aid
             ])->insert();
+            $tagCount = Db::name('tag')->count();
+            cache('cacheTagCount', $tagCount, 3600);
         }
     }
 

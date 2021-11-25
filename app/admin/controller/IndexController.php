@@ -69,11 +69,52 @@ class IndexController extends AdminController
         if ( ! empty($roleName)) {
             $adminInfo['role_name'] = implode(',', $roleName);
         }
+        $this->assign('count_info', $this->countInfo());
         $this->assign('is_file_admin', file_exists(ROOT_PATH.'/public/admin1.php'));
         $this->assign('admin_info', $adminInfo);
         $this->assign('sys_info', $this->get_sys_info());
 
         return $this->fetch();
+    }
+
+    private function countInfo()
+    {
+        if (cache('cacheArticleCount')) {
+            $articleCount = cache('cacheArticleCount');
+        } else {
+            $articleCount = Db::name('article')->where('status', 1)->count();
+            cache('cacheArticleCount', $articleCount, 3600);
+        }
+
+        if (cache('cacheLinkCount')) {
+            $linkCount = cache('cacheLinkCount');
+        } else {
+            $linkCount = Db::name('link')->where('status', 1)->count();
+            cache('cacheLinkCount', $linkCount, 3600);
+        }
+
+        if (cache('cacheTagCount')) {
+            $tagCount = cache('cacheTagCount');
+        } else {
+            $tagCount = Db::name('tag')->count();
+            cache('cacheTagCount', $tagCount, 3600);
+        }
+
+        if (cache('cacheCommentCount')) {
+            $commentCount = cache('cacheCommentCount');
+        } else {
+            $commentCount = Db::name('comment')->where('status', 1)->count();
+            cache('cacheCommentCount', $commentCount, 3600);
+        }
+
+        $countInfo = [
+            'article_count' => $articleCount,
+            'tag_count'     => $tagCount,
+            'link_count'    => $linkCount,
+            'comment_count' => $commentCount,
+        ];
+
+        return $countInfo;
     }
 
     /**

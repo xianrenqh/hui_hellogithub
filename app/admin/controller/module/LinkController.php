@@ -90,6 +90,9 @@ class LinkController extends AdminController
                 $this->error('该链接地址已存在');
             }
             $this->model->create($param);
+            $linkCount = $this->model->where('status', 1)->count();
+            cache('cacheLinkCount', $linkCount, 3600);
+
             $this->success('添加成功');
         }
 
@@ -133,6 +136,9 @@ class LinkController extends AdminController
             $this->error('此链接不存在');
         }
         $find->delete(true);
+        $linkCount = $this->model->where('status', 1)->count();
+        cache('cacheLinkCount', $linkCount, 3600);
+
         $this->success('删除成功');
     }
 
