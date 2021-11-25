@@ -187,7 +187,38 @@ class IndexController extends AdminController
      */
     public function clearCache()
     {
+        $arrDir = ['index', 'log'];
         Cache::clear();
+        $path = root_path().'runtime';
+        //如果是目录则继续
+        if ( ! is_dir($path)) {
+            $this->error('runtime目录不存在');
+        }
+        $p = scandir($path);
+        foreach ($p as $val) {
+            if ( ! in_array($val, $arrDir)) {
+                continue;
+            }
+            if ( ! is_dir($path.DS.$val)) {
+                continue;
+            }
+            $dir = $path.DS.$val.'/';
+            //先删除目录下的文件：
+            $dh = opendir($dir);
+            while ($file = readdir($dh)) {
+                if ($file != "." && $file != "..") {
+                    $fullpath = $dir.$file;
+                    if ( ! is_dir($fullpath)) {
+                        @unlink($fullpath);
+                    } else {
+                        dir_delete($fullpath);
+                    }
+                }
+            }
+            closedir($dh);
+            @rmdir($path.$val.'/');
+        }
+
         $this->success('清理缓存成功');
     }
 

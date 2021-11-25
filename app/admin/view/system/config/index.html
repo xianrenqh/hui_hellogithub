@@ -12,6 +12,7 @@
                     <li class="layui-this">基本设置</li>
                     <li>安全设置</li>
                     <li>附件设置</li>
+                    <li>CMS设置</li>
                 </ul>
                 <div class="layui-tab-content" style="margin-top: 10px;">
                     <div class="layui-tab-item layui-show">
@@ -47,19 +48,6 @@
                                            autocomplete="off" class="layui-input">
                                 </td>
                                 <td>site_keyword</td>
-                            </tr>
-                            <tr>
-                                <td>模板风格</td>
-                                <td>
-                                    <div class="layui-input-inline" style="width: 200px">
-                                        <select name="site_theme" id="site_theme">
-                                            {volist name='theme_list' id='vo'}
-                                            <option value="{$vo.value}" {if($data.site_theme==$vo.value)}selected{/if}>{$vo.name}</option>
-                                            {/volist}
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>site_theme</td>
                             </tr>
                             <tr>
                                 <td>网站版权信息</td>
@@ -238,6 +226,61 @@
                                 <td>upload_mode</td>
                             </tr>
 
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th width="15%">站点名称</th>
+                                <th>变量值</th>
+                                <th width="12%">变量名</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>前端网站开关</td>
+                                <td>
+                                    <input type="radio" name="web_site_status" value="1" title="开启" {if
+                                           ($data.web_site_status==1)}checked{/if}>
+                                    <input type="radio" name="watermark_enable" value="0" title="关闭" {if
+                                           ($data.web_site_status==0)}checked{/if}>
+                                </td>
+                                <td>web_site_status</td>
+                            </tr>
+                            <tr>
+                                <td>模板风格</td>
+                                <td>
+                                    <div class="layui-input-inline" style="width: 200px">
+                                        <select name="site_theme" id="site_theme">
+                                            {volist name='theme_list' id='vo'}
+                                            <option value="{$vo.value}" {if($data.site_theme==$vo.value)}selected{/if}>{$vo.name}</option>
+                                            {/volist}
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>site_theme</td>
+                            </tr>
+                            <tr>
+                                <td>前端缓存时间(s)</td>
+                                <td>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="upload_maxsize" value="{$data.site_cache_time}"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                    [前端缓存时间，只针对：导航、友情链接、tag标签、banner图]
+                                </td>
+                                <td>site_cache_time</td>
+                            </tr>
+                            <tr>
+                                <td>百度推送token</td>
+                                <td>
+                                    <input type="text" name="baidu_push_token" value="{$data.baidu_push_token}"
+                                           autocomplete="off" class="layui-input">
+                                </td>
+                                <td>baidu_push_token</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

@@ -124,6 +124,60 @@ class LinkController extends AdminController
      */
     public function delete()
     {
+        $id = $this->request->param('id');
+        if (empty($id)) {
+            $this->error('id不能为空');
+        }
+        $find = $this->model->where('id', $id)->find();
+        if (empty($find)) {
+            $this->error('此链接不存在');
+        }
+        $find->delete(true);
+        $this->success('删除成功');
+    }
+
+    /**
+     * @NodeAnotation(title="检测链接")
+     */
+    public function check($list_id = '')
+    {
+        $id = $this->request->param('id');
+        if (empty($id)) {
+            $this->error('id不能为空');
+        }
+        $res = $this->model->find($id);
+        if (empty($res)) {
+            $this->error('获取数据失败');
+        }
+        $url         = $res['url'];
+        $site_url    = parse_url(get_config('site_url'));
+        $site_url    = $site_url['host'];
+        $html        = get_url($url);
+        $res         = [];
+        $res['code'] = 1;
+        $res['msg']  = '';
+        $msg         = '';
+        $code        = 1;
+
+        $ok  = ' 友链正常';
+        $err = ' 友链异常';
+
+        $msg .= '['.$site_url.']';
+        if (strpos($html, $site_url) !== false) {
+            $msg         .= $ok;
+            $link_status = '<span class="layui-badge layui-bg-green"> 正常 </span>';
+        } else {
+            $msg         .= $err;
+            $link_status = '<span class="layui-badge layui-bg-red"> 异常 </span>';
+        }
+        if ($list_id != '') {
+            return $link_status;
+        } else {
+            $res['msg'] = $msg;
+
+            return json($res);
+        }
 
     }
+
 }

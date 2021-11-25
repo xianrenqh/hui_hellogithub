@@ -45,14 +45,16 @@
 
         <div class="layui-btn-group">
             <button class="layui-btn layui-btn-sm layuimini-btn-primary btn-refresh"><i class="fa fa-refresh"></i></button>
-            <a class="layui-btn layui-btn-normal layui-btn-sm {if !check_auth('content.article/add')}layui-hide{/if}"
-               data-open-full="{:__url('content.article/add',['editor'=>1])}"
-               data-title="添加文章" data-reload="2">
-                <i class="fa fa-plus"></i> 添加文章</a>
             <a class="layui-btn layui-btn-success layui-btn-sm {if !check_auth('content.article/add')}layui-hide{/if}"
                data-open-full="{:__url('content.article/add',['editor'=>2])}"
                data-title="添加MarkDown文章" data-reload="2">
                 <i class="fa fa-plus"></i> 添加MarkDown文章</a>
+            <a class="layui-btn layui-btn-normal layui-btn-sm {if !check_auth('content.article/add')}layui-hide{/if}"
+               data-open-full="{:__url('content.article/add',['editor'=>1])}"
+               data-title="添加文章" data-reload="2">
+                <i class="fa fa-plus"></i> 添加文章</a>
+            <a class="layui-btn layui-btn-sm layui-btn-fense {if !check_auth('content.article/baidu_push')}layui-hide{/if}"
+               onclick="HuiDoSub('id=0','{:__url(\'content.article/baidu_push\')}')"><i class="fa fa-arrow-up"></i> 推送到百度</a>
         </div>
 
         <table id="article_table" lay-filter="article_table"></table>
@@ -72,7 +74,16 @@
             <span class="layui-badge layui-bg-danger"> 草稿箱 </span>
             {{#  } }}
         </script>
+        <script type="text/html" id="pushTpl">
+            {{#  if(d.is_push =='1'){ }}
+            <span class="layui-badge layui-bg-green"> 已推送 </span>
+            {{#  } else { }}
+            <span class="layui-badge layui-bg-danger"> 未推送 </span>
+            {{#  } }}
+        </script>
         <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-sm layui-btn-fense {if !check_auth('content.article/baidu_push')}layui-hide{/if}"
+               onclick="HuiDoSub('id={{d.editor}}','{:__url(\'content.article/baidu_push\')}')">推送到百度</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('content.article/edit')}layui-hide{/if}"
                data-open-full="{:__url('content.article/edit')}?id={{d.id}}&editor={{d.editor}}"
                data-title="编辑内容" data-reload="2">编辑</a>
@@ -102,10 +113,10 @@
         , {field: 'cate_name', title: '所属栏目', width: 120, align: 'center'}
         , {field: 'image', title: '缩略图', width: 100, align: 'center', templet: '#image'}
         , {field: 'click', title: '点击量', width: 100, align: 'center'}
-        , {field: 'nickname', title: '发布人', width: 110}
         , {field: 'create_time', title: '添加时间', width: 170, align: 'center'}
-        , {field: 'status', title: '状态', templet: '#status', align: 'center', width: 90}
-        , {fixed: 'right', title: '操作', toolbar: '#barDemo', align: 'center', width: 150}
+        , {field: 'status', title: '文章状态', templet: '#status', align: 'center', width: 90}
+        , {field: 'is_push', title: '推送状态', templet: '#pushTpl',align: 'center',width: 90}
+        , {fixed: 'right', title: '操作', toolbar: '#barDemo', align: 'center', width: 240}
       ]]
       , id: 'testReload'
       , page: true

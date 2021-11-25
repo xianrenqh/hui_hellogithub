@@ -254,4 +254,51 @@ class ArticleController extends AdminController
         }
     }
 
+    /**
+     * @NodeAnotation(title="推送到百度")
+     */
+    public function baidu_push()
+    {
+        if ($this->request->isPost()) {
+            $id = $this->request->param('id');
+            if ( ! empty($id)) {
+                $ids = [$id];
+            } else {
+                $ids = $this->model->where('is_push', 0)->column('id');
+            }
+            if (empty($ids)) {
+                $this->error('没有数据被推送');
+            }
+            $urls      = [];
+            $http_host = get_config('site_url');
+            foreach ($ids as $v) {
+                $urls[] = $http_host."/index/show/id/".$v.".html";
+            }
+            $baidu_push_token = get_config('baidu_push_token');
+            if (empty($baidu_push_token)) {
+                $this->error('token值为空，请到系统设置中配置！');
+            }
+            $api_url = 'http://data.zz.baidu.com/urls?site='.$http_host.'&token='.$baidu_push_token;
+            $ch      = curl_init();
+            $options = array(
+                CURLOPT_URL            => $api_url,
+                CURLOPT_POST           => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POSTFIELDS     => implode("\n", $urls),
+                CURLOPT_HTTPHEADER     => array('Content-Type: text/plain'),
+            );
+            curl_setopt_array($ch, $options);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($result, true);
+            if (isset($result['success'])) {
+                $this->model->whereIn('id', $ids)->data(['is_push' => 1])->update();
+                $this->success('成功推送'.$result['success'].'条URL地址！');
+            } else {
+                $this->error('推送失败，错误码：'.$result['error']);
+            }
+
+        }
+    }
+
 }

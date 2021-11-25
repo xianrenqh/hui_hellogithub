@@ -12,7 +12,6 @@ namespace app\common\taglib;
 use app\portal\controller\DumpTestController;
 use think\template\TagLib;
 
-const CACHE = 3600;
 class HuiCmf extends TagLib
 {
 
@@ -27,6 +26,14 @@ class HuiCmf extends TagLib
         'tag'         => ['attr', 'limit,return', 'close' => 0],
         'centent_tag' => ['attr', 'limit,return', 'close' => 0],
     ];
+
+    public function get_cache_time()
+    {
+        $cacheTime = get_config('site_cache_time');
+        $cacheTime = ! empty($cacheTime) ? $cacheTime : 3600;
+
+        return $cacheTime;
+    }
 
     public function tagNav($tag, $content)
     {
@@ -50,7 +57,7 @@ class HuiCmf extends TagLib
         $parseStr .= ' $'.$return.'[$i][\'url\'] = str_replace("/index.php","",$'.$return.'[$i][\'url\']);';
         $parseStr .= '  }';
         $parseStr .= ' }';
-        $parseStr .= 'cache("indexCategory", $'.$return.', '.CACHE.');';
+        $parseStr .= 'cache("indexCategory", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
@@ -83,7 +90,7 @@ class HuiCmf extends TagLib
         $parseStr .= '$'.$return.' = cache("indexLink_'.$typeid.'");';
         $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("link")->field("'.$field.'")->where("'.$where.'")->order("listorder asc")->limit('.$limit.')->select()->toArray();';
-        $parseStr .= 'cache("indexLink_'.$typeid.'", $'.$return.', '.CACHE.');';
+        $parseStr .= 'cache("indexLink_'.$typeid.'", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
@@ -118,7 +125,7 @@ class HuiCmf extends TagLib
         $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
         $parseStr .= ' $'.$return.'[$i][\'url\'] = __url("index/index/tags",[\'tag\'=>$'.$return.'[$i][\'tag\']]);';
         $parseStr .= ' }';
-        $parseStr .= 'cache("indexTagsAll", $'.$return.', '.CACHE.');';
+        $parseStr .= 'cache("indexTagsAll", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
@@ -149,7 +156,7 @@ class HuiCmf extends TagLib
         $parseStr .= '$'.$return.' = cache("contentTags_$id");';
         $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("tag")->field("t.tag")->alias("t")->leftJoin("tag_content c","c.tagid=t.id")->where("'.$where.'")->limit('.$limit.')->select()->toArray();';
-        $parseStr .= 'cache("contentTags_$id", $'.$return.', '.CACHE.');';
+        $parseStr .= 'cache("contentTags_$id", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;
@@ -186,7 +193,7 @@ class HuiCmf extends TagLib
         $parseStr .= '$'.$return.' = cache("indexBanner");';
         $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("banner")->field("'.$field.'")->where("'.$where.'")->order("listorder asc")->limit('.$limit.')->select()->toArray();';
-        $parseStr .= 'cache("indexBanner", $'.$return.', '.CACHE.');';
+        $parseStr .= 'cache("indexBanner", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;

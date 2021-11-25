@@ -269,6 +269,50 @@ if ( ! function_exists('array_format_key')) {
 }
 
 /**
+ * 列出目录下所有文件
+ *
+ * @param string $path 路径
+ * @param string $exts 扩展名
+ * @param array  $list 增加的文件列表
+ *
+ * @return  array  所有满足条件的文件
+ */
+if ( ! function_exists('dir_path')) {
+    function dir_path($path)
+    {
+        $path = str_replace('\\', '/', $path);
+        if (substr($path, -1) != '/') {
+            $path = $path.'/';
+        }
+
+        return $path;
+    }
+}
+
+/**
+ * 删除目录及目录下面的所有文件
+ *
+ * @param string $dir 路径
+ *
+ * @return  bool   如果成功则返回 TRUE，失败则返回 FALSE
+ */
+if ( ! function_exists('dir_delete')) {
+    function dir_delete($dir)
+    {
+        $dir = dir_path($dir);
+        if ( ! is_dir($dir)) {
+            return false;
+        }
+        $list = glob($dir.'*');
+        foreach ($list as $v) {
+            is_dir($v) ? dir_delete($v) : @unlink($v);
+        }
+
+        return @rmdir($dir);
+    }
+}
+
+/**
  * 转换字节数为其他单位
  *
  * @param string $filesize 字节大小
@@ -606,7 +650,8 @@ if ( ! function_exists('array2level')) {
  */
 if ( ! function_exists('str_cut')) {
     function str_cut($string, $length, $dot = '...', $code = 'utf-8')
-    {$strlen = strlen($string);
+    {
+        $strlen = strlen($string);
         if ($strlen <= $length) {
             return $string;
         }
@@ -1043,7 +1088,6 @@ if ( ! function_exists('to_guid_string')) {
         return md5($mix);
     }
 }
-
 
 /**
  * 兼容低版本的array_column

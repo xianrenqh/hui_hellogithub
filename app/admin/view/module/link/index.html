@@ -47,6 +47,7 @@
         <table id="tag_table" lay-filter="tag_table"></table>
 
         <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-sm layui-btn-success" onclick="check('{{d.id}}')">检测</a>
             <a class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('module.link/edit')}layui-hide{/if}" data-open="{:__url('module.link/edit')}?id={{d.id}}"
                data-title="编辑链接" data-reload="2">编辑</a>
             <a class="layui-btn layui-btn-danger layui-btn-sm {if !check_auth('module.link/delete')}layui-hide{/if}" data-delete="{:__url('module.link/delete')}?id={{d.id}}"
@@ -140,6 +141,13 @@
         WeAdminShow("编辑", "{:__url('admin_edit')}?id=" + data.id, '800');
       }
     });
+    window.check =function (id){
+      $.post("{:__url('check')}",{
+        id:id
+      },function (res) {
+        layer.msg(res.msg);
+      })
+    }
   });
 </script>
 </body>
