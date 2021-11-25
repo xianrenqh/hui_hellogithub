@@ -319,7 +319,7 @@ class ArticleController extends AdminController
             if ($type == 'add') {
                 $findData = $this->model->where(['git_url' => $gitUrl])->find();
                 if ( ! empty($findData)) {
-                    //$this->error('该url已经存在啦');
+                    $this->error('该url已经存在啦');
                 }
             }
             if (strstr($gitUrl, 'github.com')) {
