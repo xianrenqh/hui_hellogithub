@@ -103,6 +103,9 @@ class ArticleController extends AdminController
             $thumbArr          = array_filter(explode(',', $param['thumbs']));
             $param['thumbs']   = json_encode($thumbArr, true);
             $param['admin_id'] = cmf_get_admin_id();
+            $huiTags           = $param['hui_tags'];
+            //tag标签作为关键词
+            $param['keywords'] = $huiTags;
             //自动提取缩略图
             if (isset($param['auto_image']) && $param['image'] == '') {
                 $param['image'] = GetImgSrc::src($param['content']);
@@ -129,7 +132,6 @@ class ArticleController extends AdminController
                 cache('cacheArticleCount', $articleCount);
 
                 //写入tag标签
-                $huiTags    = $param['hui_tags'];
                 $huiTagsArr = explode(',', $huiTags);
                 if ( ! empty($huiTagsArr)) {
                     $TagModel = new TagModel();
