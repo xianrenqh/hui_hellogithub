@@ -262,7 +262,7 @@ class ArticleController extends AdminController
         if ($this->request->isPost()) {
             $id = $this->request->param('id');
             if ( ! empty($id)) {
-                $ids = [$id];
+                $ids = explode(',', $id);
             } else {
                 $ids = $this->model->where('is_push', 0)->column('id');
             }
@@ -292,10 +292,53 @@ class ArticleController extends AdminController
             curl_close($ch);
             $result = json_decode($result, true);
             if (isset($result['success'])) {
-                $this->model->whereIn('id', $ids)->data(['is_push' => 1])->update();
+                $a = $this->model->whereIn('id', $ids)->data(['is_push' => 1])->update();
                 $this->success('成功推送'.$result['success'].'条URL地址！');
             } else {
                 $this->error('推送失败，错误码：'.$result['error']);
+            }
+
+        }
+    }
+
+    /**
+     * @NodeAnotation(title="采集git")
+     */
+    public function collection()
+    {
+        if ($this->request->isAjax()) {
+            $gitUrl = $this->request->param('git_url');
+            $type   = $this->request->param('type');
+            //查询此giturl是否已存在数据库
+            if ($type == 'add') {
+                $findData = $this->model->where(['git_url' => $gitUrl])->find();
+                if ( ! empty($findData)) {
+                    //$this->error('该url已经存在啦');
+                }
+            }
+            if (strstr($gitUrl, 'github.com')) {
+                $vowels  = [
+                    'https://github.com/',
+                    'https://www.github.com/',
+                    'https//www.github.com/',
+                    'http://www.github.com/'
+                ];
+                $webhost = str_replace($vowels, 'https://cdn.jsdelivr.net/gh/', $gitUrl);
+                $url     = $webhost."/README.md";
+            } elseif (strstr($gitUrl, 'gitee.com')) {
+                $url = $gitUrl."/raw/master/README.md";
+            } else {
+
+            }
+            try {
+                $html = file_get_contents($url);
+            } catch (\Exception $e) {
+                $this->error('获取数据失败，请检测url是否正确');
+            }
+            if ( ! empty($html)) {
+                $this->success('ok', ['html' => $html]);
+            } else {
+                $this->error('error');
             }
 
         }

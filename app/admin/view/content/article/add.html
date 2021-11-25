@@ -73,7 +73,7 @@
             </div>
 
 
-            <div class="layui-form-item" id="imgItem">
+            <div class="layui-form-item" id="imgItem" style="display: none">
                 <label class="layui-form-label">上传多图：</label>
                 <button type="button" id="importModel" class="layui-hide">图片导入</button>
                 <div class="layui-input-inlines-self" id="imgItemInfo">
@@ -135,14 +135,24 @@
                     </div>
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label required">项目地址</label>
                 <div class="layui-input-block">
-                    <input type="text" id="git_url" name="git_url" value="" lay-verify="required"
-                           autocomplete="off"
-                           class="layui-input" lay-reqtext="项目地址不能为空">
+                    <div class="layui-input-inline" style="width: 50%">
+                        <label for="git_url">
+                            <input type="text" id="git_url" name="git_url" value="" lay-verify="required"
+                                   autocomplete="off"
+                                   class="layui-input" lay-reqtext="项目地址不能为空">
+                        </label>
+                    </div>
+                    <div class="layui-input-inline" style="width: 120px">
+                        <button type="button" class="layui-btn layui-btn-normal" onclick="collection()">采集</button>
+                    </div>
+
                 </div>
             </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">TAG：</label>
                 <div class="layui-input-inline block" style="width: 50%;">
@@ -344,6 +354,26 @@
     window.set_status = function (s) {
       $("input[name='status']").val(s);
     }
+
+    //采集内容
+    window.collection = function () {
+      let git_url = $('#git_url').val();
+      if (git_url == '') {
+        layer.msg('git地址不能为空');
+        return false;
+      }
+      $.post("{:__url('content.Article/collection')}", {git_url: git_url, type: 'add'}, function (res) {
+        if(res.code==1){
+          $(function() {
+            var editor = editormd("content-editor", {
+              autoFocus : false,
+              saveHTMLToTextarea : true,
+              markdown:res.data.html
+            });
+          })
+        }
+      })
+    };
 
     window.dosub = function (obj) {
       let jump_url = $('#jump_url').val();
