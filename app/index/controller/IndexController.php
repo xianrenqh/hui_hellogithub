@@ -230,8 +230,8 @@ class IndexController extends BaseController
         $limit    = explode(",", $limitStr)[1];
 
         $list = Db::name('article')->field('a.id,a.title,a.type_id,a.image,a.description,a.click,a.update_time,c.cate_name,c.cate_en')->alias("a")->leftJoin("category c",
-            "c.id = a.type_id")->where('status', 1)->whereIn('a.id', $contentId)->limit($first,
-            $limit)->select()->toArray();
+            "c.id = a.type_id")->where('status', 1)->whereIn('a.id',
+            $contentId)->order('update_time desc')->limit($first, $limit)->select()->toArray();
         if ($total > $limit) {
             $pages = $Page->pages($total);
         }
@@ -272,7 +272,8 @@ class IndexController extends BaseController
             $limit    = explode(",", $limitStr)[1];
 
             $list = Db::name('article')->field('a.id,a.title,a.type_id,a.image,a.description,a.click,a.update_time,c.cate_name,c.cate_en')->alias("a")->leftJoin("category c",
-                "c.id = a.type_id")->where($where)->limit($first, $limit)->select()->toArray();
+                "c.id = a.type_id")->where($where)->order('update_time desc')->limit($first,
+                $limit)->select()->toArray();
             for ($i = 0; $i < count($list); $i++) {
                 $list[$i]['url'] = buildContentUrl($list[$i]['id']);
             }
@@ -293,18 +294,4 @@ class IndexController extends BaseController
         return $this->fetch();
     }
 
-    public function p()
-    {
-        $id = 3;
-        if (cache("contentTags")):$tags = cache("contentTags");
-        else: $tags = \think\facade\Db::name("tag")->field("t.tag")->alias("t")->leftJoin("tag_content c",
-            "c.tagid=t.id")->where("1=1 and aid=$id")->limit(10)->select()->toArray();endif;
-        dump($tags);
-    }
-
-    public function test()
-    {
-
-        return $this->fetch();
-    }
 }
