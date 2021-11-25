@@ -626,7 +626,10 @@ nav span {
     width: 100%;
     min-height: 400px;
 }
-.content a{color: #0969da;}
+
+.content a {
+    color: #0969da;
+}
 
 .tags {
     margin: 20px 0;
@@ -867,7 +870,8 @@ nav span {
     opacity: 1;
     filter: alpha(opacity=100);
 }
-.footer{
+
+.footer {
     background: #000;
     padding: 15px 10px 15px 10px;
     border-top: solid 3px #ed4040;
@@ -875,4 +879,26 @@ nav span {
     font-size: 13px;
     text-align: center;
 }
-.footer a{color:#ccc}
+
+.footer a {
+    color: #ccc
+}
+
+/*内容editmd样式*/
+.container .content h1 {
+    margin-top: 20px;
+    text-align: left;
+    padding-bottom: .3em;
+    font-size: 2em;
+    border-bottom: 1px solid #ccc;
+}
+
+.container .content ul {
+}
+
+.container .content ul li {
+}
+
+.container .content ul ul {
+    list-style-type: circle;
+}

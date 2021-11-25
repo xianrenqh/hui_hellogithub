@@ -32,6 +32,9 @@ class IndexController extends BaseController
         $this->getSeoInfo();
         $this->assign('site', $this->site);
         $this->assign("siteurl", $siteUrl);
+        if ( ! get_config('web_site_status')) {
+            $this->error("站点已经关闭，请稍后访问~", '', '', 3600);
+        }
     }
 
     /**
