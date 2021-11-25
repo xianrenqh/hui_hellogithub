@@ -59,7 +59,8 @@
 
         <table id="article_table" lay-filter="article_table"></table>
         <script type="text/html" id="title_n">
-           <img src="__STATIC_ADMIN__/images/md.jpeg" width="12" style="margin-right: 5px;margin-left: -12px;">{{d.title}}
+           <img src="__STATIC_ADMIN__/images/md.jpeg" width="12" style="margin-right: 5px;margin-left: -12px;">
+           <a href="/index/show/id/{{d.id}}.html" target="_blank">{{d.title}}</a>
         </script>
         <script type="text/html" id="image">
             {{#  if(d.image !=''){ }}
