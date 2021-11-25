@@ -40,6 +40,9 @@ class SitemapController extends AdminController
         $this->directory = ROOT_PATH.'public/';
     }
 
+    /**
+     * @NodeAnotation(title="网站地图")
+     */
     public function index()
     {
         if ($this->request->isPost()) {
