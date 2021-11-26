@@ -16,7 +16,7 @@ class ChangyanController extends BaseController
     {
         $postData = file_get_contents('php://input');
         //$data     = json_decode($postData, true);
-        file_get_contents('cy.txt', $postData, FILE_APPEND);
+        file_put_contents('cy.txt', $postData, FILE_APPEND);
     }
 
 }
