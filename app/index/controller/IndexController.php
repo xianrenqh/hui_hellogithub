@@ -216,7 +216,7 @@ class IndexController extends BaseController
     }
 
     /**
-     * tag标签
+     * tag标签查询文章列表
      */
     public function tags()
     {
@@ -251,7 +251,16 @@ class IndexController extends BaseController
         $this->assign('total', $total);
         $this->assign('keyword', $tag);
 
-        return $this->fetch('tag_list');
+        return $this->fetch();
+    }
+
+    public function tag_list()
+    {
+        $this->assign('seo_title', $this->seo_title);
+        $this->assign('keywords', $this->keywords);
+        $this->assign('description', $this->description);
+        $this->assign('catid', 0);
+        return $this->fetch();
     }
 
     /**

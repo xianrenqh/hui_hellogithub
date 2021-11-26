@@ -65,7 +65,8 @@ class BannerController extends AdminController
                 'url|链接地址'   => 'require'
             ];
             $this->validate($param, $rule);
-
+            $this->model->create($param);
+            $this->success('保存成功');
         }
         $types = $this->model->getType();
         $this->assign('types', $types);
@@ -78,6 +79,8 @@ class BannerController extends AdminController
      */
     public function edit()
     {
+        $id = $this->request->param('id');
+
         if ($this->request->isAjax()) {
             $param = $this->request->param();
             $rule  = [
@@ -86,8 +89,16 @@ class BannerController extends AdminController
                 'url|链接地址'   => 'require'
             ];
             $this->validate($param, $rule);
-
+            $this->model->update($param);
+            $this->success('保存成功');
         }
+        if (empty($id)) {
+            $this->error('获取数据失败');
+        }
+        $data  = $this->model->find($id);
+        $types = $this->model->getType();
+        $this->assign('types', $types);
+        $this->assign('data', $data);
 
         return $this->fetch();
     }
@@ -97,7 +108,17 @@ class BannerController extends AdminController
      */
     public function delete()
     {
+        $id = $this->request->param('id');
+        if (empty($id)) {
+            $this->error('id不能为空');
+        }
+        $find = $this->model->where('id', $id)->find();
+        if (empty($find)) {
+            $this->error('此幻灯不存在');
+        }
+        $find->delete(true);
 
+        $this->success('删除成功');
     }
 
     /**
@@ -105,7 +126,19 @@ class BannerController extends AdminController
      */
     public function cat_list()
     {
+        $BannerType = new BannerTypeModel();
+        if ($this->request->isAjax()) {
+            $ids = $this->request->param('id');
+            if (empty($ids)) {
+                $this->error('不能为空');
+            }
+            $BannerType->whereIn('tid', $ids)->delete(true);
+            $this->success('删除成功');
+        }
+        $data = $BannerType::select();
+        $this->assign('data', $data);
 
+        return $this->fetch();
     }
 
     /**
@@ -118,6 +151,10 @@ class BannerController extends AdminController
             $rule  = [
                 'name|分类名称' => 'require',
             ];
+            $this->validate($param, $rule);
+            $BannerType = new BannerTypeModel();
+            $BannerType->create($param);
+            $this->success('添加成功');
         }
 
         return $this->fetch();

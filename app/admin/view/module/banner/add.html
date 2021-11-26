@@ -32,12 +32,12 @@
             <div class="layui-form-item">
                 <label class="layui-form-label required">链接地址</label>
                 <div class="layui-input-block">
-                    <input type="text" id="url" name="url" value="" lay-verify="url" autocomplete="off"
+                    <input type="text" id="url" name="url" value="" lay-verify="required" autocomplete="off"
                            class="layui-input" lay-reqtext="链接地址不能为空">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">图片地址</label>
+                <label class="layui-form-label required">图片地址</label>
                 <div class="layui-input-inline" style="width: 55%">
                     <label for="image">
                         <input type="text" name="image" value="" onmouseover="hui_img_preview('image',this.value)"

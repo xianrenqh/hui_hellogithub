@@ -13,6 +13,12 @@
 
         <table id="banner_table" lay-filter="banner_table"></table>
 
+        <script type="text/html" id="imageTpl">
+            {{#  if(d.image !=''){ }}
+            <img src="{{d.image}}" onmouseover="hui_img_preview('image2','{{d.image}}')" onmouseout="layer.closeAll();"
+                 id="image2" width="20">
+            {{#  } }}
+        </script>
         <script type="text/html" id="barDemo">
             <a class="layui-btn layui-btn-sm layui-btn-normal {if !check_auth('module.banner/edit')}layui-hide{/if}"
                data-open="{:__url('module.banner/edit')}?id={{d.id}}"
@@ -49,7 +55,7 @@
         {type: 'numbers'}
         , {field: 'id', title: 'ID', width: 60, align: 'center'}
         , {field: 'title', title: '名称'}
-        , {field: 'image', title: 'image'}
+        , {field: 'image', title: 'image', templet: '#imageTpl', align: 'center'}
         , {field: 'url', title: 'url'}
         , {field: 'listorder', title: '排序', width: 100, align: 'center'}
         , {field: 'status', title: '可见性', templet: '#status', width: 120, align: 'center'}

@@ -276,6 +276,12 @@ nav span {
     border: solid 1px #f1f1f1;
     border-bottom: solid 3px #ed4040ad;
 }
+.box_r section h2 span{
+    float: right;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 2px;
+}
 
 .search {
     background: #ed4040;

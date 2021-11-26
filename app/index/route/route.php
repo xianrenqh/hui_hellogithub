@@ -5,6 +5,7 @@ use think\facade\Route;
 Route::group('/', function () {
     Route::rule('list', 'index/index/lists');
     Route::rule('show', 'index/index/show');
+    Route::rule('tag_list', 'index/index/tag_list');
     Route::rule('list/:catid/[:condition]', 'index/index/lists')->pattern([
         'catid'     => '\d+',
         'condition' => '[0-9_&=a-zA-Z]+'

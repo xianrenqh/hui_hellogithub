@@ -1,34 +1,29 @@
 <!doctype html>
 <html>
 {include file='index/header'}
+<style>
+    @media screen and (min-width: 900px){
+        .box_l{width: 82%}
+    }
+    @media screen and (min-width: 641px) and (max-width: 900px) {
+        .box_l{width: 82%}
+    }
+    @media screen and (max-width: 766px) {
+        .box_l{width: 96%}
+    }
+</style>
 <article>
     {include file='index/nav'}
     <div class="box_l">
-        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; tag列表</div>
-        <div class="search_tips">
-            <b>Tag标签：<span>{$keyword}</span> 搜索结果：<span>{$total}</span> 条</b>
-        </div>
-        <ul class="news_list">
-            {volist name='list' id='vo'}
-            <li>
-                <a href="{$vo.url}" title="{$vo.title}">
-                    <i><img src="{$vo.image|default='/static/water/nopic.jpeg'}" alt="{$vo.title}"></i>
-                    <h2>{$vo.title}</h2>
-                </a>
-                <p class="news_list_info">{$vo.description}</p>
-                <p class="news_list_time">
-                    <span><a href="{:__url('index/index/lists',['catdir'=>$vo.cate_en])}">{$vo.cate_name}</a></span>
-                    <span>时间：{$vo.update_time|date='Y-m-d'}</span><span>点击：{$vo.click}</span>
-                    <span>评论数：<span id = "sourceId::{$vo.id}" class = "cy_cmt_count" ></span></span>
-                </p>
-            </li>
+        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; 所有tag标签</div>
+
+        <ul class="tags">
+            {huicmf:tag limit="2000" return="tags" /}
+            {volist name='tags' id='vo'}
+            <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
             {/volist}
         </ul>
-        <div class="pagelist">
-            {$pages|raw}
-        </div>
     </div>
-    {include file='index/aside'}
 </article>
 {include file='index/footer'}
 </body>

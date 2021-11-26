@@ -50,7 +50,7 @@
     </section>
 
     <section>
-        <h2>热门标签</h2>
+        <h2>热门标签 <span><a href="{:__url('index/index/tag_list')}">>>全部</a></span></h2>
         <ul class="tags">
             {huicmf:tag limit="25" return="tags" /}
             {volist name='tags' id='vo'}
