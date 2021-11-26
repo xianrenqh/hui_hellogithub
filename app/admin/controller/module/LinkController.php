@@ -155,10 +155,11 @@ class LinkController extends AdminController
         if (empty($res)) {
             $this->error('获取数据失败');
         }
-        $url         = $res['url'];
-        $site_url    = parse_url(get_config('site_url'));
-        $site_url    = $site_url['host'];
-        $html        = get_url($url);
+        $url      = $res['url'];
+        $site_url = parse_url(get_config('site_url'));
+        $site_url = $site_url['host'];
+        $html     = get_url($url);
+
         $res         = [];
         $res['code'] = 1;
         $res['msg']  = '';
