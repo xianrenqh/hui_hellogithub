@@ -226,7 +226,7 @@ class IndexController extends BaseController
 
         $pages    = "";
         $total    = Db::name('article')->where('status', 1)->whereIn('id', $contentId)->count();
-        $limit    = 10;
+        $limit    = 15;
         $Page     = new Page($total, $limit, 0);
         $limitStr = $Page->limit();
         $first    = explode(",", $limitStr)[0];
@@ -264,7 +264,7 @@ class IndexController extends BaseController
         $where   = "status=1";
         $list    = [];
         $pages   = "";
-        $limit   = 10;
+        $limit   = 15;
         $total   = 0;
         if ( ! empty($keyword)) {
             $where    .= " and title like '%".$keyword."%'";
