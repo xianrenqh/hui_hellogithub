@@ -113,19 +113,20 @@ class HuiCmf extends TagLib
     public function tagTag($tag, $content)
     {
         $limit = isset($tag['limit']) ? $tag['limit'] : '20';
+        $type  = isset($tag['type']) ? $tag['type'] : '';
         //数据返回变量
         $return = isset($tag['return']) && trim($tag['return']) ? trim($tag['return']) : 'data';
 
         //拼接php代码
         $parseStr = '<?php ';
-        $parseStr .= 'if(cache("indexTagsAll")):';
-        $parseStr .= '$'.$return.' = cache("indexTagsAll");';
+        $parseStr .= 'if(cache("indexTagsAll_'.$type.'")):';
+        $parseStr .= '$'.$return.' = cache("indexTagsAll_'.$type.'");';
         $parseStr .= 'else: ';
         $parseStr .= '$'.$return.'=\think\facade\Db::name("tag")->field("tag,total")->orderRaw("rand(),id desc")->limit('.$limit.')->select()->toArray();';
         $parseStr .= 'for ($i = 0; $i < count($'.$return.'); $i++) {';
         $parseStr .= ' $'.$return.'[$i][\'url\'] = __url("index/index/tags",[\'tag\'=>$'.$return.'[$i][\'tag\']]);';
         $parseStr .= ' }';
-        $parseStr .= 'cache("indexTagsAll", $'.$return.', '.$this->get_cache_time().');';
+        $parseStr .= 'cache("indexTagsAll_'.$type.'", $'.$return.', '.$this->get_cache_time().');';
         $parseStr .= 'endif;';
         $parseStr .= ' ?>';
         $parseStr .= $content;

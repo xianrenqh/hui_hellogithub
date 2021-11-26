@@ -18,7 +18,7 @@
         <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; 所有tag标签</div>
 
         <ul class="tags">
-            {huicmf:tag limit="2000" return="tags" /}
+            {huicmf:tag limit="2000" return="tags" type="list"/}
             {volist name='tags' id='vo'}
             <a href="{$vo.url}" target="_blank">{$vo.tag}({$vo.total})</a>
             {/volist}
