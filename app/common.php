@@ -1098,30 +1098,63 @@ if ( ! function_exists('to_guid_string')) {
  *
  * @return array       返回一个数组，数组的值为输入数组中某个单一列的值。
  */
-function hui_array_column($array, $column_key, $index_key = null)
-{
-    if (function_exists('array_column')) {
-        return array_column($array, $column_key, $index_key);
-    }
-
-    $result = array();
-    foreach ($array as $key => $value) {
-        if ( ! is_array($value)) {
-            continue;
+if ( ! function_exists('hui_array_column')) {
+    function hui_array_column($array, $column_key, $index_key = null)
+    {
+        if (function_exists('array_column')) {
+            return array_column($array, $column_key, $index_key);
         }
-        if ($column_key) {
-            if ( ! isset($value[$column_key])) {
+
+        $result = array();
+        foreach ($array as $key => $value) {
+            if ( ! is_array($value)) {
                 continue;
             }
-            $tmp = $value[$column_key];
-        } else {
-            $tmp = $value;
+            if ($column_key) {
+                if ( ! isset($value[$column_key])) {
+                    continue;
+                }
+                $tmp = $value[$column_key];
+            } else {
+                $tmp = $value;
+            }
+            if ($index_key) {
+                $key = isset($value[$index_key]) ? $value[$index_key] : $key;
+            }
+            $result[$key] = $tmp;
         }
-        if ($index_key) {
-            $key = isset($value[$index_key]) ? $value[$index_key] : $key;
-        }
-        $result[$key] = $tmp;
-    }
 
-    return $result;
+        return $result;
+    }
+}
+
+/**
+ * 传入时间戳,计算距离现在的时间
+ *
+ * @param number $time 时间戳
+ *
+ * @return string     返回多少以前
+ */
+if ( ! function_exists('hui_word_time')) {
+    function hui_word_time($time)
+    {
+        $time = (int)substr($time, 0, 10);
+        $int  = time() - $time;
+        $str  = '';
+        if ($int <= 2) {
+            $str = sprintf('刚刚', $int);
+        } elseif ($int < 60) {
+            $str = sprintf('%d秒前', $int);
+        } elseif ($int < 3600) {
+            $str = sprintf('%d分钟前', floor($int / 60));
+        } elseif ($int < 86400) {
+            $str = sprintf('%d小时前', floor($int / 3600));
+        } elseif ($int < 1728000) {
+            $str = sprintf('%d天前', floor($int / 86400));
+        } else {
+            $str = date('Y-m-d H:i:s', $time);
+        }
+
+        return $str;
+    }
 }

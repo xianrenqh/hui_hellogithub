@@ -16,7 +16,7 @@
                 <p class="news_list_info">{$vo.description}</p>
                 <p class="news_list_time">
                     <span><a href="{:__url('index/index/lists',['catdir'=>$vo.cate_en])}">{$vo.cate_name}</a></span>
-                    <span>时间：{$vo.update_time|date='Y-m-d'}</span><span>点击：{$vo.click}</span>
+                    <span>时间：{:hui_word_time($vo.update_time)}</span><span>点击：{$vo.click}</span>
                     <span>评论数：<span id = "sourceId::{$vo.id}" class = "cy_cmt_count" ></span></span>
                 </p>
             </li>

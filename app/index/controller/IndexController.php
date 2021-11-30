@@ -363,10 +363,15 @@ class IndexController extends BaseController
      */
     public function project_add()
     {
+        if ($this->request->isPost()) {
+
+        }
         $this->assign('seo_title', '项目提交-'.$this->seo_title);
         $this->assign('keywords', $this->keywords);
         $this->assign('description', $this->description);
         $this->assign('catid', 0);
+
+        return $this->fetch();
     }
 
     /**

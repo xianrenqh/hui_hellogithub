@@ -11,7 +11,7 @@
         <div class="container">
             <h1>{$info.title}</h1>
             <div class="info">
-                <span>日期：{$info.update_time|date="Y-m-d H:i:s"}</span><span>点击：{$info.click}</span>
+                <span>日期：{:hui_word_time($info.update_time)}</span><span>点击：{$info.click}</span>
             </div>
             <div class="github_info">
                 <div class="github_url">
