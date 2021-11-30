@@ -316,6 +316,7 @@ class ArticleController extends AdminController
     {
         if ($this->request->isAjax()) {
             $gitUrl = $this->request->param('git_url');
+            $gitUrl = str_replace("://www.", "://", $gitUrl);
             $type   = $this->request->param('type');
             //查询此giturl是否已存在数据库
             if ($type == 'add') {
