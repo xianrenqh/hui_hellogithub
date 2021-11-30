@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<link rel="stylesheet" href="/static/lib/layui-v2.6.7/css/layui.css" media="all">
+{include file='index/header'}
+<style>
+    @media screen and (min-width: 900px) {
+        .box_l {
+            width: 82%
+        }
+    }
+
+    @media screen and (min-width: 641px) and (max-width: 900px) {
+        .box_l {
+            width: 82%
+        }
+    }
+
+    @media screen and (max-width: 766px) {
+        .box_l {
+            width: 96%
+        }
+    }
+</style>
+<article>
+    {include file='index/nav'}
+    <div class="box_l">
+        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; 友链提交</div>
+        <div class="add_form">
+            <form action="javascript:" class="layui-form" autocomplete="off" method="post"
+                  onsubmit="return dosub(this)">
+                <table class="layui-table">
+                    <tr>
+                        <td><font color="red">*</font> 验证码</td>
+                        <td>
+                            <div class="layui-input-inline input_w_100">
+                                <input class="layui-input" type="text" id="captcha" name="captcha" lay-verify="required"
+                                       placeholder="请输入验证码"
+                                       maxlength="4" lay-reqtext="验证码不能为空">
+                            </div>
+                            <div class="layui-input-inline">
+                                <img id="refreshCaptcha" class="validateImg validateImgM" src="{:__url('captcha')}"
+                                     onclick="this.src='{:__url(\'captcha\')}?seed='+Math.random()" title="点击刷新">
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><font color="red">*</font> 网站名称</td>
+                        <td>
+                            <input type="text" class="layui-input" autocomplete="off" name="name" id="name"
+                                   lay-verify="required" placeholder="请输入网站名称" lay-reqtext="网站名称不能为空">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><font color="red">*</font> 交换链接</td>
+                        <td>
+                            <input type="text" class="layui-input" name="url" id="url" lay-verify="required|url"
+                                   placeholder="请输入网站链接" autocomplete="off" lay-reqtext="网站链接不能为空">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><font color="red">*</font> 站长昵称</td>
+                        <td>
+                            <input type="text" name="username" id="username" lay-verify="required" placeholder="请输入站长昵称"
+                                   class="layui-input" autocomplete="off" lay-reqtext="站长昵称不能为空">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><font color="red">*</font> 站长Email</td>
+                        <td>
+                            <input type="text" id="email" name="email" lay-verify="required|email" placeholder="请输入站长Email"
+                                   class="layui-input" autocomplete="off" lay-reqtext="站长Email不能为空">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>简介备注</td>
+                        <td>
+                            <textarea class="layui-textarea" name="msg" id="msg"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button class="layui-btn layui-btn-sm" lay-submit="">立即提交</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+    </div>
+</article>
+{include file='index/footer'}
+<script src="/static/lib/layui-v2.6.7/layui.js" charset="utf-8"></script>
+<script>
+  layui.use(['form', 'jquery'], function () {
+    var form = layui.form, $ = layui.jquery;
+    form.render();
+    window.dosub = function (obj) {
+      $.post("{:__url('link_apply')}",$(obj).serialize(),function (res){
+        if(res.code===1){
+          layer.msg(res.msg,{icon:1},function (){
+            window.location.reload();
+          })
+        }else{
+          layer.msg(res.msg,{icon:2})
+        }
+      })
+    }
+  })
+
+</script>
+</body>
+</html>

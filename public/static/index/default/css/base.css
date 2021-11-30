@@ -67,6 +67,11 @@ article {
     margin-bottom: 20px;
 }
 
+.topbar .topBox {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .topbar ul {
     width: 1200px;
     margin: auto
@@ -107,7 +112,20 @@ article {
     z-index: 9
 }
 
-/*nav*/
+.topbar .r_tips {
+    float: right;
+}
+
+.topbar .r_tips a {
+    color: #fff;
+    margin-left: 10px;
+    color: #e38712
+}
+.topbar .r_tips a:hover{
+    color:#58e312;
+}
+
+    /*nav*/
 nav {
     width: 110px;
     float: left
@@ -276,7 +294,8 @@ nav span {
     border: solid 1px #f1f1f1;
     border-bottom: solid 3px #ed4040ad;
 }
-.box_r section h2 span{
+
+.box_r section h2 span {
     float: right;
     font-size: 13px;
     font-weight: 500;
@@ -917,6 +936,7 @@ nav span {
     background-position: 0 -90px;
     border: 0px solid red;
 }
+
 .dandelion span {
     -webkit-animation: ball-x 3s linear 2s infinite;
     -moz-animation: ball-x 3s linear 2s infinite;
@@ -925,15 +945,18 @@ nav span {
     -moz-transform-origin: bottombottom center;
     transform-origin: bottombottom center;
 }
+
 .dandelion span {
-    display: block;bottom:0px;
+    display: block;
+    bottom: 0px;
     position: fixed;
-    z-index:9999999999;
+    z-index: 9999999999;
     bottombottom: 0px;
     background-image: url(../images/pugongying.png);
     background-repeat: no-repeat;
     _background: none;
 }
+
 .dandelion .bigdan {
     width: 64px;
     height: 115px;
@@ -941,30 +964,83 @@ nav span {
     background-position: -86px -36px;
     border: 0px solid red;
 }
-@media screen and (max-width:600px){
-    .dandelion{display: none !important;}
+
+@media screen and (max-width: 600px) {
+    .dandelion {
+        display: none !important;
+    }
 }
+
 @keyframes ball-x {
-    0% { transform:rotate(0deg);}
-    20% { transform:rotate(5deg); }
-    40% { transform:rotate(0deg);}
-    60% { transform:rotate(-5deg);}
-    80% { transform:rotate(0deg);}
-    100% { transform:rotate(0deg);}
+    0% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(5deg);
+    }
+    40% {
+        transform: rotate(0deg);
+    }
+    60% {
+        transform: rotate(-5deg);
+    }
+    80% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
 }
+
 @-webkit-keyframes ball-x {
-    0% { -webkit-transform:rotate(0deg);}
-    20% { -webkit-transform:rotate(5deg); }
-    40% { -webkit-transform:rotate(0deg);}
-    60% { -webkit-transform:rotate(-5deg);}
-    80% { -webkit-transform:rotate(0deg);}
-    100% { -webkit-transform:rotate(0deg);}
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    20% {
+        -webkit-transform: rotate(5deg);
+    }
+    40% {
+        -webkit-transform: rotate(0deg);
+    }
+    60% {
+        -webkit-transform: rotate(-5deg);
+    }
+    80% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
 }
+
 @-moz-keyframes ball-x {
-    0% { -moz-transform:rotate(0deg);}
-    20% { -moz-transform:rotate(5deg); }
-    40% { -moz-transform:rotate(0deg);}
-    60% { -moz-transform:rotate(-5deg);}
-    80% { -moz-transform:rotate(0deg);}
-    100% { -moz-transform:rotate(0deg);}
+    0% {
+        -moz-transform: rotate(0deg);
+    }
+    20% {
+        -moz-transform: rotate(5deg);
+    }
+    40% {
+        -moz-transform: rotate(0deg);
+    }
+    60% {
+        -moz-transform: rotate(-5deg);
+    }
+    80% {
+        -moz-transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(0deg);
+    }
+}
+
+/*友链申请*/
+.add_form{width:93%;margin:0 auto;}
+.add_form .layui-table .validateImg {
+    position: absolute;
+    cursor: pointer;
+    height: 35px;
+    border: 1px solid #e6e6e6;
+    margin-top: -19px;
+    max-width: 120px;
 }

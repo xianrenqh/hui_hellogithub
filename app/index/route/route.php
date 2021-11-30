@@ -13,4 +13,6 @@ Route::group('/', function () {
     Route::rule('show/:catid/:id', 'index/index/show')->pattern(['catid' => '\d+', 'id' => '\d+']);
     Route::rule('tag/[:tag]', 'index/index/tags');
     Route::rule('search', 'index/index/search');
+    Route::rule('link_apply', 'index/index/link_apply');
+    Route::rule('project_add', 'index/index/project_add');
 });

@@ -21,6 +21,7 @@ article, .topbar ul, .box { width: 940px }
 .topbar ul, .box { width: 98% }
 article { width: 100% }
 .topbar { margin-bottom: 0 }
+.topbar .r_tips{display: none;}
 .logo { display: inline-block; float: left; margin: 5px 20px 0; }
 .logo img { }
 nav { width: 100%; margin-bottom: 20px; box-shadow: 0px 3px 10px 1px rgba(144, 161, 180, 0.4); }
@@ -62,3 +63,6 @@ nav ul li a { margin: 0 4px; }
 .content p { margin: 15px 0; }
 .container { font-size: 15px; }
 }
+.layui-table td, .layui-table th{padding: 5px 8px;}
+.layui-table .input_w_100{max-width: 100px;}
+.add_form .layui-table .validateImgM{max-width: 100px;}

@@ -12,6 +12,7 @@ namespace app\index\controller;
 use app\index\BaseController;
 use think\facade\Db;
 use lib\Page;
+use think\captcha\facade\Captcha;
 
 const CACHE = 3600;
 
@@ -260,6 +261,7 @@ class IndexController extends BaseController
         $this->assign('keywords', $this->keywords);
         $this->assign('description', $this->description);
         $this->assign('catid', 0);
+
         return $this->fetch();
     }
 
@@ -304,6 +306,94 @@ class IndexController extends BaseController
         $this->assign('keyword', $keyword);
 
         return $this->fetch();
+    }
+
+    /**
+     * 友情链接申请页面
+     */
+    public function link_apply()
+    {
+        if ($this->request->isPost()) {
+            $ip    = get_client_ip();
+            $param = $this->request->param();
+            if ( ! captcha_check($param['captcha'])) {
+                $this->error('验证码不正确');
+            }
+            if (empty($param['name'])) {
+                $this->error('网站名称不能为空');
+            }
+            if (empty($param['url'])) {
+                $this->error('网站链接不能为空');
+            }
+            if (empty($param['username'])) {
+                $this->error('站长昵称不能为空');
+            }
+            if (empty($param['email'])) {
+                $this->error('站长Email不能为空');
+            }
+            $findRow = Db::name('link')->where('url', $param['url'])->find();
+            if ( ! empty($findRow)) {
+                $this->error('该链接已经存在或者已经申请过了，请耐心等待');
+            }
+            $param['create_time'] = time();
+            $param['update_time'] = time();
+            $param['ip']          = $ip;
+
+            // 调整提交频率[30秒内同一ip最多提交3条]
+            $temp_time          = time() - 30;
+            $comment_time_count = Db::name('link')->where('ip', $ip)->whereBetweenTime('create_time', $temp_time,
+                time())->count();
+            if ($comment_time_count && $comment_time_count > 3) {
+                $this->error('休息一下吧~');
+            }
+            Db::name('link')->strict(false)->insert($param);
+            $this->send_wx_api('提交友情链接申请');
+            $this->success('提交成功，请耐心等待审核');
+        }
+        $this->assign('seo_title', '友情链接申请-'.$this->seo_title);
+        $this->assign('keywords', $this->keywords);
+        $this->assign('description', $this->description);
+        $this->assign('catid', 0);
+
+        return $this->fetch();
+    }
+
+    /**
+     * 项目提交
+     */
+    public function project_add()
+    {
+        $this->assign('seo_title', '项目提交-'.$this->seo_title);
+        $this->assign('keywords', $this->keywords);
+        $this->assign('description', $this->description);
+        $this->assign('catid', 0);
+    }
+
+    /**
+     * 验证码
+     * @return \think\Response
+     */
+    public function captcha()
+    {
+        return Captcha::create();
+    }
+
+    /**
+     * 微信机器人推送
+     *
+     * @param $title
+     *
+     * @return bool|mixed|string
+     */
+    private function send_wx_api($title)
+    {
+        $web_name = get_config('site_name');
+        $dataTime = date('Y-m-d H:i:s');
+        //你的推送url地址【这里是企业微信群机器人api地址】
+        $post_url  = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=".get_config('weixin_webhook_key');
+        $post_data = '{"msgtype": "markdown","markdown": {"content": "## <font color=\"red\" >【'.$web_name.'】\n 您有【'.$title.'】，赶快去处理吧～～～<\/font>\n ><font color=\"warning\">时间：</font>\n'.$dataTime.'\n > "}}';
+
+        return $res = curl_post($post_url, $post_data);
     }
 
 }

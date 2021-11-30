@@ -89,6 +89,7 @@ class LinkController extends AdminController
             if ($row) {
                 $this->error('该链接地址已存在');
             }
+            $param['ip'] = get_client_ip();
             $this->model->create($param);
             $linkCount = $this->model->where('status', 1)->count();
             cache('cacheLinkCount', $linkCount, 3600);
