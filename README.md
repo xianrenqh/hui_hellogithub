@@ -159,6 +159,9 @@ __STATIC_INDEX__
 //内容页url地址
 {$page_url}
 
+//单页面获取内容
+{huicmf:page_content}
+
 ~~~
 
 #### 1、万能标签

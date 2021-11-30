@@ -18,13 +18,14 @@ class HuiCmf extends TagLib
     public $page, $total;
 
     protected $tags = [
-        'nav'         => ['attr' => 'field,order,limit,where', 'close' => 0],
-        'link'        => ['attr' => 'field,typeid,limit,return', 'close' => 0],
-        'banner'      => ['attr' => 'field,typeid,limit,return', 'close' => 0],
-        'get'         => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
-        'lists'       => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
-        'tag'         => ['attr', 'limit,return', 'close' => 0],
-        'centent_tag' => ['attr', 'limit,return', 'close' => 0],
+        'nav'          => ['attr' => 'field,order,limit,where', 'close' => 0],
+        'link'         => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'banner'       => ['attr' => 'field,typeid,limit,return', 'close' => 0],
+        'get'          => ['attr' => 'sql,table,where,limit,typeid,return,page', 'close' => 0],
+        'lists'        => ['attr' => 'field,limit,return,where,page,typeid', 'close' => 0],
+        'tag'          => ['attr', 'limit,return', 'close' => 0],
+        'centent_tag'  => ['attr', 'limit,return', 'close' => 0],
+        'page_content' => ['attr', 'return', 'close' => 0],
     ];
 
     public function get_cache_time()
@@ -131,6 +132,24 @@ class HuiCmf extends TagLib
         $parseStr .= ' ?>';
         $parseStr .= $content;
 
+        if ( ! empty($parseStr)) {
+            return $parseStr;
+        }
+
+        return false;
+    }
+
+    /**
+     * 单页面的内容
+     *
+     * @param $tag
+     * @param $content
+     */
+    public function tagPage_content($tag, $content)
+    {
+        $catid    = getCateId();
+        $content  = \think\facade\Db::name('category')->where('id', $catid)->value('content');
+        $parseStr = $content;
         if ( ! empty($parseStr)) {
             return $parseStr;
         }

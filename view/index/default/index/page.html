@@ -1,10 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-page
+<!doctype html>
+<html>
+{include file='index/header'}
+<style>
+    @media screen and (min-width: 900px){
+        .box_l{width: 82%}
+    }
+    @media screen and (min-width: 641px) and (max-width: 900px) {
+        .box_l{width: 82%}
+    }
+    @media screen and (max-width: 766px) {
+        .box_l{width: 96%}
+    }
+</style>
+<article>
+    {include file='index/nav'}
+    <div class="box_l">
+        <div class="weizhi">您现在的位置是：<a href="{$siteurl}">首页</a>&gt; {:catpos($catid)}</div>
+        {huicmf:page_content}
+    </div>
+</article>
+{include file='index/footer'}
 </body>
 </html>

@@ -223,6 +223,9 @@ layui.define(['jquery', 'form', 'layer', 'element', 'table', 'iconPickerFa', 'up
             if (refresh == 1) {
               window.location.reload();
             }
+            else if (reload == 2) {
+              window.location.reload();
+            }
           });
         } else {
           layer.msg(res.msg, {icon: 2});
@@ -240,6 +243,8 @@ layui.define(['jquery', 'form', 'layer', 'element', 'table', 'iconPickerFa', 'up
         if (res.code === 1) {
           layer.msg(res.msg, {icon: 1, time: 1500}, function () {
             if (refresh == 1) {
+              window.location.reload();
+            }else if (reload == 2) {
               window.location.reload();
             }
           });
