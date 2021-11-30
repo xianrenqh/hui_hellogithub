@@ -25,7 +25,7 @@
         </div>
         <!-- banner end-->
         <ul class="news_list">
-            {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="18" return="data"/}
+            {huicmf:lists field="id,title,type_id,image,description,click,update_time" limit="15" return="data" page="1"/}
             {volist name='data' id='vo'}
             <li>
                 <a href="{$vo.url}" title="{$vo.title}">
@@ -41,6 +41,9 @@
             </li>
             {/volist}
         </ul>
+        <div class="pagelist">
+            {$pages|raw}
+        </div>
     </div>
     {include file='index/aside'}
 </article>
