@@ -98,7 +98,7 @@ class ChangyanController extends BaseController
             halt($ex->getMessage());
         }
 
-        return "文件已生成到运行根目录";
+        return "sitemap.xml已生成到运行根目录";
     }
 
     public function test()
