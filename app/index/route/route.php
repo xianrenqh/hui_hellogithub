@@ -3,6 +3,7 @@
 use think\facade\Route;
 
 Route::group('/', function () {
+    Route::rule('index', 'index/index/index');
     Route::rule('list', 'index/index/lists');
     Route::rule('show', 'index/index/show');
     Route::rule('tag_list', 'index/index/tag_list');
