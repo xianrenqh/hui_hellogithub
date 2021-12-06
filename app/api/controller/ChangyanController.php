@@ -82,7 +82,7 @@ class ChangyanController extends BaseController
         }
 
         //标签
-        $tags = Db::name('tag')->order('create_time desc')->field('tag,create_time')->select();
+        $tags = Db::name('tag')->field('tag,create_time')->limit(50)->order('create_time desc')->select();
         if ( ! empty($tags)) {
             foreach ($tags as $vo) {
                 $item = $this->_sitemap_item($rootUrl."/index/tag/".$vo['tag'].".html", 2, 'weekly', time());
