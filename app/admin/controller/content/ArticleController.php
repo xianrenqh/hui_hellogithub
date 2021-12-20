@@ -21,6 +21,7 @@ use lib\Random;
 use lib\GetImgSrc;
 use think\facade\Db;
 use think\response\Json;
+use lib\Original;
 
 /**
  * @ControllerAnnotation(title="文章管理")
@@ -169,9 +170,9 @@ class ArticleController extends AdminController
         if (empty($data)) {
             $this->error('获取数据失败');
         }
-        $data['thumbs']       = json_decode($data['thumbs'], true);
-        $data['thumbs_count'] = count($data['thumbs']);
-        $data['thumbs']       = implode(',', $data['thumbs']);
+        $thumbs               = json_decode($data['thumbs'], true);
+        $data['thumbs_count'] = ! empty($thumbs) && is_array($thumbs) ? count($thumbs) : 0;
+        $data['thumbs']       = ! empty($thumbs) && is_array($thumbs) ? implode(',', $data['thumbs']) : '';
         $data['flag']         = array_filter(explode(',', $data['flag']));
         if ( ! empty($editor) && $editor == 2) {
             $data['content'] = $data['content_md'];
