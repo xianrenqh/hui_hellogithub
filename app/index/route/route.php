@@ -16,4 +16,5 @@ Route::group('/', function () {
     Route::rule('search', 'index/index/search');
     Route::rule('link_apply', 'index/index/link_apply');
     Route::rule('project_add', 'index/index/project_add');
+    Route::rule('captcha', 'index/index/captcha');
 });
