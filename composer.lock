@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8d7de6c5e9a9e7bf0a54dc488810d87",
+    "content-hash": "1df904c8b1b18457a1fea96526d515a5",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1019,6 +1019,62 @@
             "time": "2019-11-06T11:40:13+00:00"
         },
         {
+            "name": "xianrenqh/think-addons",
+            "version": "v0.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xianrenqh/think-addons.git",
+                "reference": "673f7dc6dc62b72d6c1bca78daec9b3c02d89b46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xianrenqh/think-addons/zipball/673f7dc6dc62b72d6c1bca78daec9b3c02d89b46",
+                "reference": "673f7dc6dc62b72d6c1bca78daec9b3c02d89b46",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0",
+                "topthink/framework": "^6.0",
+                "topthink/think-helper": "^3.0.0",
+                "topthink/think-view": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "think": {
+                    "services": [
+                        "think\\addons\\Service"
+                    ],
+                    "config": {
+                        "addons": "src/config.php"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "think\\": "src/"
+                },
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "xiaohuihui",
+                    "email": "762229008@qq.com"
+                }
+            ],
+            "description": "The ThinkPHP6 Addons Package",
+            "support": {
+                "issues": "https://github.com/xianrenqh/think-addons/issues",
+                "source": "https://github.com/xianrenqh/think-addons/tree/v0.0.4"
+            },
+            "time": "2021-12-14T09:53:02+00:00"
+        },
+        {
             "name": "xiaodi/think-whoops",
             "version": "v1.1.8",
             "source": {
@@ -1074,62 +1130,6 @@
                 "source": "https://github.com/friendsofthinkphp/think-whoops/tree/v1.1.8"
             },
             "time": "2020-07-06T11:29:44+00:00"
-        },
-        {
-            "name": "zzstudio/think-addons",
-            "version": "2.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zz-studio/think-addons.git",
-                "reference": "7eb740cb219a111d593a05ad88248a74f640fe5c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zz-studio/think-addons/zipball/7eb740cb219a111d593a05ad88248a74f640fe5c",
-                "reference": "7eb740cb219a111d593a05ad88248a74f640fe5c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1.0",
-                "topthink/framework": "^6.0",
-                "topthink/think-helper": "^3.0.0",
-                "topthink/think-view": "^1.0"
-            },
-            "type": "library",
-            "extra": {
-                "think": {
-                    "services": [
-                        "think\\addons\\Service"
-                    ],
-                    "config": {
-                        "addons": "src/config.php"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "think\\": "src/"
-                },
-                "files": [
-                    "src/helper.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "byron",
-                    "email": "xiaobo.sun@qq.com"
-                }
-            ],
-            "description": "The ThinkPHP6 Addons Package",
-            "support": {
-                "issues": "https://github.com/zz-studio/think-addons/issues",
-                "source": "https://github.com/zz-studio/think-addons/tree/2.0.5"
-            },
-            "time": "2020-01-06T06:42:39+00:00"
         }
     ],
     "packages-dev": [
